@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        section{
+            min-height: 100vh;
+            width: 100%;
+            background: linear-gradient(navy, aqua);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container{
+            height: 400px;
+            width: 300px;
+            position: relative;
+            z-index: 100;
+            transition: 0.5s;
+            transform-style: preserve-3d;
+        }
+
+        .container .card{
+            background: rgb(244, 197, 197);
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            border-radius: 25px;
+            backdrop-filter: blur(25px);
+            overflow: hidden;
+            backface-visibility: hidden;
+        }
+        .front .img img{
+            /* margin: 10px 10px 10px 10px; */
+             width: 300px;
+            height: 180px;
+            overflow: hidden;
+            /* margin-left: 10px; */
+            /* margin-top: 5px; */
+        }
+        .card.back{
+            transform: rotateY(180deg);
+        }
+        .container:hover{
+            transform: rotateY(180deg);
+        }
+        /* .front .img img:hover{
+            transform: scale(1.1);
+        } */
+        .p2{
+            height: 150vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: aliceblue;
+        }
+        .p2 a{
+            text-decoration: none;
+            background: aliceblue;
+            position: relative;
+            height: 50px;
+            width: 50px;
+            margin: auto 10px;
+            box-shadow: -5px -3px 6px white, 3px 3px 3px #ceced1;
+            display: inline-flex;
+            transition: all 0.3s ease;
+             border-radius: 30%;
+        }
+        .p2 a:hover::before{
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 30%;
+            box-shadow: inset -3px -3px 7px white, inset 3px 3px 5px #ceced1;
+        }
+        .p2 a i{
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            line-height: 50px;
+            font-size: larger;
+        }
+        .p2 a:hover{
+            transform: scale(1.1);
+        }
+        .p2 a:nth-child(1){
+            color: black;
+        }
+        .p2 a:nth-child(2){
+            color: red;
+        }
+        .p2 a:nth-child(3){
+            color: voilet;
+        }
+        .p2 a:nth-child(4){
+            color: #0077B5;
+        }
+        .p2 a:nth-child(5){
+            color: black;
+        }
+        .third{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100%;
+
+        }
+        .p3{
+            height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 40px 0;
+            max-width: 720px;
+            background: aliceblue;
+            border-radius: 30px;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0);
+            position: relative;
+            background-image: url(./wave-haikei.png);
+        }
+        
+       
+        .p3.box.two.image{
+            height: 500px;
+            width: 430px;
+            
+        }
+        .box.two.image img{
+            height: 100%;
+            width: 100%;
+            
+
+        }
+        .box.two .info{
+            margin: 30px 35px 0 0;
+        }
+        .box.two .info .brand{
+            font-size: 17px;
+            font-weight: 600;
+            color: red;
+          
+        }
+        .box.two .info .name{
+            font-size: 20px;
+            font-weight: 600;
+            color: black;
+        }
+        .box.two .info .shipping{
+            font-size: 14px;
+            font-weight: 400;
+            color: #000;
+        }
+        .box.two .info .btn2{
+            margin: 17px 0;
+        }
+        .box.two .info .btn2 button{
+            outline: none;
+            padding: 8px 16px;
+            border: 1px solid #fff;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            background: transparent;
+        }
+        .box.two .info .btn2 button:hover{
+            cursor: pointer;
+            transform: scale(1.1);
+        }
+        .p3 .box.one{
+            padding: 35px 5px 0 35px;
+        }
+        .box.one .details .topic{
+            font-size: 30px;
+            font-weight: 450;
+            color: white;
+        }
+        .box.one .details p{
+            color: grey;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .box.one .details .rating{
+            color: yellowgreen;
+        }
+        .box.one .details .pricebox{
+            margin-top: 16px;
+        }
+        .details .pricebox .discount{
+            font-size: 20px;
+            color: grey;
+            font-weight: 500;
+            margin: 10px 0 0 12px;
+            position: relative;
+        }
+        .pricebox .discount::before{
+            content: '';
+            position: absolute;
+            height: 1px;
+            width: 60px;
+            background: grey;
+            top: 50%;
+            left: -8px;
+        }
+        .details .pricebox .price{
+            color: yellowgreen;
+            font-size: 30px;
+        }
+        .box.one .btn1{
+            margin-top: 55px;
+        }
+        .box.one .btn1 button{
+            outline: none;
+            background: lightyellow;
+            color: rgb(0, 0, 0);
+            border-radius: 6px;
+            padding: 8px 16px;
+            border: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .box.one .btn1 button:hover{
+            transform: scale(1.1);
+        }
+        .container .box.two .image{
+            position: relative;
+            text-align: right;
+            right: 0;
+            bottom: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <section id="p1">
+        <div class="container">
+            <div class="card front">
+              <div class="img">
+                <img src="./eminem2.png" alt="">
+              </div>
+              <h1 style="font-size: 16px; margin-left: 5px;">Marshal Bruce Mathers III</h1>
+              <p style="margin: 10px 5px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Eminem is widely regarded as one of the greatest rappers of all time, known for his razor-sharp lyricism, rapid-fire delivery, and emotional storytelling. He rose from poverty and a rough childhood to dominate the rap world, breaking racial barriers as one of the most successful white rappers in a predominantly Black genre.</p>
+            </div>
+            <div class="card back">
+                <h1 style="margin: 30px 20px;">Top 10 Songs</h1>
+                <pre style="position: relative; left: -160px; font-size: 18px;">
+                    1. LoseYourself
+                    2. Stan
+                    3. The Real Slim Shady
+                    4. Without Me
+                    5. MockingBird
+                    6. Till I Collapse
+                    7. Not Afraid
+                    8. Cleanin Out My Closet
+                    9. My Name is
+                    10. Rap God
+                </pre>
+            </div>
+        </div>
+    </section>
+    <div class="p2">
+        <a href=""><i class="fa-brands fa-x-twitter"></i></a>
+        <a href=""><i class="fa-brands fa-youtube"></i></a>
+        <a href=""><i class="fa-brands fa-instagram"></i></a>
+        <a href=""><i class="fa-brands fa-linkedin"></i></a>
+        <a href=""><i class="fa-brands fa-github"></i></a>
+    </div>
+    <div class="third">
+    <div class="p3">
+        <div class="box one">
+            <div class="details">
+                <div class="topic">
+                    Description
+                </div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae itaque quam soluta! Tempore exercitationem nam error quibusdam fugiat molestias, deleniti doloribus veritatis placeat facere esse?</p>
+                <div class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+                <div class="pricebox">
+                    <div class="discount">$700</div>
+                    <div class="price">$549</div>
+                </div>
+                <div class="btn1">
+                    <button>Add To Cart</button>
+                </div>
+            </div>
+        </div>
+        <div class="box two">
+            <div class="image" style="margin-top: -80px;">
+                <img src="./akm4.png" alt="">
+            </div>
+            <div class="info">
+                <div class="brand">STARK INDUSTRIES</div>
+                <div class="name">AKM</div>
+                <div class="shipping">FREE SHIPPING</div>
+                <div class="btn2"><button>Login For More</button></div>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>

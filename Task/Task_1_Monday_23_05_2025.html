@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        
+        #mutta{
+            height: 250px;
+            width: 200px;
+            background-image: url('/bg.avif');
+            background-size: contain;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            border: solid 2px;
+            margin-bottom: 10px;
+            animation: move 1s forwards ease;
+        }
+      
+        @keyframes move{
+            0%{
+                margin-left: 0px;
+                transform: rotate(0deg);
+            }
+            10%{
+                margin-left: 100px;
+                transform: rotate(30deg);
+            }
+            20%{
+                margin-left: 200px;
+                transform: rotate(60deg);
+            }
+            30%{
+                margin-left: 300px;
+                 transform: rotate(90deg);
+            }
+            40%{
+                margin-left: 400px;
+                 transform: rotate(120deg);
+            }
+            50%{
+                margin-left: 500px;
+                 transform: rotate(150deg);
+            }
+            60%{
+                margin-left: 600px;
+                 transform: rotate(180deg);
+            }
+            70%{
+                margin-left: 700px;
+                 transform: rotate(210deg);
+            }
+            80%{
+                margin-left: 800px;
+                 transform: rotate(240deg);
+            }
+            90%{
+                margin-left: 900px;
+                 transform: rotate(270deg);
+            }
+            100%{
+                margin-left: 1000px;
+                 transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="mutta">
+
+    </div>
+    <button id="btn">button</button>
+</body>
+</html>

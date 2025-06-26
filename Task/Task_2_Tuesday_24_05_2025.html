@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Document</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(to bottom, #f0f2f5, white);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding-top: 4rem;
+    }
+
+    .pricing-container {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      padding: 2rem;
+    }
+
+    .price-card {
+      background: white;
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      width: 280px;
+      padding: 2rem;
+      transition: transform 0.2s ease;
+    }
+
+    .price-card:hover {
+      transform: scale(1.05);
+    }
+
+    .price {
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .popular {
+      background-color: #6c47ff;
+      color: white;
+      position: relative;
+    }
+
+    .popular::before {
+      content: "MOST POPULAR";
+      position: absolute;
+      top: -1.1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      color: #6c47ff;
+      padding: 0.3rem 1rem;
+      font-weight: bold;
+      font-size: 0.85rem;
+      border-radius: 20px;
+    }
+
+    .features {
+      list-style: none;
+      padding: 0;
+      margin: 1rem 0;
+      text-align: left;
+    }
+
+    .features li {
+      margin-bottom: 0.5rem;
+    }
+
+    .startToday-btn {
+      border: none;
+      background-color: #6c47ff;
+      color: white;
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-weight: bold;
+      transition: transform 0.1s ease;
+    }
+
+    .price-card.popular .startToday-btn {
+      background: white;
+      color: #6c47ff;
+    }
+
+    .startToday-btn:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="pricing-container">
+  
+
+  <div class="card price-card">
+    <div class="card-body text-center">
+      <div class="price">$10<sub>/month</sub></div>
+      <h6 class="text-muted">Basic</h6>
+      <ul class="features">
+        <li>✔ Feature A</li>
+        <li>✔ Feature B</li>
+        <li>❌ Feature C</li>
+        <li>❌ Feature D</li>
+        <li>❌ Feature E</li>
+        <li>❌ Feature F</li>
+      </ul>
+      <button class="startToday-btn">Start Today</button>
+    </div>
+  </div>
+
+
+
+  <div class="card price-card popular">
+    <div class="card-body text-center">
+      <div class="price">$20<sub>/month</sub></div>
+      <h6 class="text-light">Professional</h6>
+      <ul class="features">
+        <li>✔ Feature A</li>
+        <li>✔ Feature B</li>
+        <li>✔ Feature C</li>
+        <li>✔ Feature D</li>
+        <li>✔ Feature E</li>
+        <li>❌ Feature F</li>
+      </ul>
+      <button class="startToday-btn">Start Today</button>
+    </div>
+  </div>
+
+ 
+
+  <div class="card price-card">
+    <div class="card-body text-center">
+      <div class="price">$50<sub>/month</sub></div>
+      <h6 class="text-muted">Enterprise</h6>
+      <ul class="features">
+        <li>✔ Feature A</li>
+        <li>✔ Feature B</li>
+        <li>✔ Feature C</li>
+        <li>✔ Feature D</li>
+        <li>✔ Feature E</li>
+        <li>✔ Feature F</li>
+      </ul>
+      <button class="startToday-btn">Start Today</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
