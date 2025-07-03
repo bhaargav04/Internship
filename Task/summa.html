@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DVD Bouncing Circle (setInterval)</title>
+  <style>
+    .circle {
+      position: absolute;
+      width: 150px;
+      height: 100px;
+      background: red;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+    
+    }
+    .buttons {
+      margin-bottom: 30px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      border-radius: 5px;
+    }
+
+    .shape {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto;
+      background-color: crimson;
+      transition: all 0.4s ease;
+    }
+
+    .circle1 {
+      border-radius: 50%;
+    }
+
+    .square {
+      border-radius: 0;
+      width: 150px;
+      height: 150px;
+    }
+
+    .rectangle {
+      width: 200px;
+      height: 100px;
+      border-radius: 0;
+    }
+
+    .triangle {
+      width: 0;
+      height: 0;
+      background: none;
+      border-left: 75px solid transparent;
+      border-right: 75px solid transparent;
+      border-bottom: 130px solid crimson;
+    }
+    .two{
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="height: 100vh;">
+  <div class="circle">
+    <h1>DVD</h1>
+  </div>
+  </div>
+  <div class="two">
+  <div class="buttons">
+    <button onmouseenter="changeShape('square')">Square</button>
+    <button onmouseenter="changeShape('circle1')">Circle</button>
+    <button onmouseenter="changeShape('triangle')">Triangle</button>
+    <button onmouseenter="changeShape('rectangle')">Rectangle</button>
+  </div>
+
+  <div id="shapeBox" class="shape square"></div>
+  </div>
+  <input type="color" id="color"><h1 id="head">Chameleon</h1>
+
+</body>
+<script>
+
+    var color = document.getElementById('color');
+    var head = document.getElementById('head');
+
+   color.addEventListener('input', () => {
+    head.style.color = color.value;
+  });
+
+
+    const circle = document.querySelector('.circle');
+    let x = 150;
+    let y = 100;
+    let dx = 3;
+    let dy = 3;
+
+    setInterval(() => {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      x += dx;
+      y += dy;
+      if (x + 160 > screenWidth || x < 0) {
+        dx *= -1;
+      }
+      if (y + 100 > screenHeight || y < 0) {
+        dy *= -1;
+      }
+      circle.style.left = x + 'px';
+      circle.style.top = y + 'px';
+    }, 16); 
+
+    changeShape=(shape)=>{
+      const box = document.getElementById("shapeBox");
+      box.className = 'shape';
+      box.classList.add(shape);
+    }
+  </script>
+</html>
