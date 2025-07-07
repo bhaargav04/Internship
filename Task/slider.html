@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .slider {
+            position: relative;
+            width: 50%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .slider img {
+            width: 50%;
+            height: 80vh;
+            margin: auto 25%;
+            display: none;
+        }
+        .img displaySlide{
+            display: block;
+            animation: fade 1s ease-in-out;
+        }
+        
+        .slider button{
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-size: 20px;
+        }
+        .previou {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        @keyframes fade {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slider">
+    <div class="slides">
+        <img class="slide" src="./images/goku2.png" alt="image1">
+        <img class="slide" src="./images/goku3.png" alt="image2">
+        <img class="slide" src="./images/goku4.png" alt="image3">
+    </div>
+    <button class="prev" onclick="previousSlide()">&#8592;</button>
+    <button class="next" onclick="nextSlide()">&#8594;</button>
+    </div>
+</body>
+<script>
+
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.style.display = (i === index) ? 'block' : 'none';
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    function previousSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        showSlide(currentSlide);
+    }
+
+    // Initialize the first slide
+    showSlide(currentSlide);
+</script>
+</html>

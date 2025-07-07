@@ -1,0 +1,424 @@
+/* ===================
+   Theme Variables
+=================== */
+
+/* Light Theme (Default) */
+:root {
+  --bg-color: #ffffff;
+  --text-color: #121212;
+  --primary-bg: #0d6efd;
+  --input-border: #6c757d;
+  --suggestion-bg: rgba(13, 202, 240, 0.1);
+  --suggestion-border: rgba(13, 202, 240, 0.25);
+  --card-bg: #e9f1ff;
+  --section-title-color: #121212;
+  --accordion-bg: #f1f1f1;
+  --accordion-header-bg: #e1e1e1;
+  --accordion-body-bg: #d9d9d9;
+  --accordion-text-color: #000;
+  --progress-bg: #ccc;
+  --progress-fill: linear-gradient(90deg, #17c0eb, #0984e3);
+  --weather-card-bg: #d1f3f9;
+  --weather-card-text: #121212;
+  --border-color: #6c757d;
+}
+
+/* Dark Theme */
+.dark {
+  --bg-color: #121212;
+  --text-color: #ffffff;
+  --primary-bg: #0d6efd;
+  --input-border: #6c757d;
+  --suggestion-bg: rgba(13, 202, 240, 0.1);
+  --suggestion-border: rgba(13, 202, 240, 0.25);
+  --card-bg: #0d6efd;
+  --section-title-color: #ffffff;
+  --accordion-bg: #1e1e2f;
+  --accordion-header-bg: #2c2c3c;
+  --accordion-body-bg: #292941;
+  --accordion-text-color: #ffffff;
+  --progress-bg: #3e3e55;
+  --progress-fill: linear-gradient(90deg, #17c0eb, #0984e3);
+  --weather-card-bg: #0dcaf0;
+  --weather-card-text: #ffffff;
+  --border-color: #6c757d;
+}
+
+/* ===================
+   Global Styles
+=================== */
+
+body {
+  font-family: sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+  padding: 0;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ===================
+   Component Styles
+=================== */
+
+.weather-title {
+  text-align: center;
+  color: var(--section-title-color);
+  margin-top: 3rem;
+  font-size: 2.5rem;
+}
+
+.search-container {
+  max-width: 800px;
+  background-color: var(--primary-bg);
+  padding: 2.5rem;
+  margin: 3rem auto;
+  border-radius: 30px;
+  color: var(--text-color);
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.75rem 0.10rem;
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.suggestion {
+  text-align: center;
+  background-color: var(--suggestion-bg);
+  border: 1px solid var(--suggestion-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  color: var(--text-color);
+  cursor: pointer;
+  margin: 0.5rem 0;
+}
+
+.result-container {
+  max-width: 800px;
+  background-color: var(--card-bg);
+  padding: 2.5rem;
+  margin: 3rem auto;
+  border-radius: 25px;
+  color: var(--text-color);
+}
+
+/* ===================
+   Theme Toggle
+=================== */
+
+.theme-toggle {
+  text-align: right;
+  margin: 1rem 2rem 0 0;
+  display: flex;
+  
+}
+
+.theme-toggle label {
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+}
+
+/* ===================
+   Current.css
+=================== */
+
+.current-container {
+  max-width: 1200px;
+  margin: 3rem auto;
+  padding: 1rem;
+}
+
+.current-title {
+  color: var(--section-title-color);
+  text-align: center;
+  font-size: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+.weather-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.weather-card {
+  flex: 1 1 22%;
+  background-color: var(--weather-card-bg);
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  padding: 1rem;
+  color: var(--weather-card-text);
+  min-width: 200px;
+  box-sizing: border-box;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-condition {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.weather-condition img {
+  width: 70px;
+  height: 70px;
+  margin-right: 5px;
+}
+
+.weather-condition h6 {
+  font-size: 1.3rem;
+  margin: 0;
+}
+
+/* ===================
+   Forecast.css
+=================== */
+
+.forecast-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.forecast-title {
+  color: var(--section-title-color);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.accordion-custom {
+  background-color: var(--accordion-bg);
+  color: var(--accordion-text-color);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.accordion-header-custom {
+  background-color: var(--accordion-header-bg);
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.accordion-header-custom img {
+  width: 50px;
+  height: 50px;
+}
+
+.accordion-body-custom {
+  padding: 1rem;
+  background-color: var(--accordion-body-bg);
+  display: none;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.accordion-custom.open .accordion-body-custom {
+  display: block;
+}
+
+.accordion-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  color: var(--accordion-text-color);
+}
+
+.progress-bar-container {
+  background-color: var(--progress-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  height: 25px;
+  margin-bottom: 1rem;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  text-align: center;
+  line-height: 25px;
+  background: var(--progress-fill);
+  color: black;
+  font-weight: bold;
+}
+
+/* Optional Fade Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Toggle Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px; width: 20px;
+  left: 4px; bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #2196f3;
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+
+/* hometown */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+}
+
+.hometown-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hometown-input {
+  padding: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.set-button {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background-color: #3f51b5;
+  color: white;
+  cursor: pointer;
+}
+
+.hometown-weather {
+  text-align: right;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hometown Suggestions Dropdown */
+.suggestions-box {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--suggestion-bg);
+  border: 1px solid var(--suggestion-border);
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 999;
+}
+
+.suggestions-box .suggestion {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--suggestion-border);
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.suggestions-box .suggestion:last-child {
+  border-bottom: none;
+}
+
+.suggestions-box .suggestion:hover {
+  background-color: var(--card-bg);
+}
+
+@media (max-width: 768px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .hometown-container {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hometown-input {
+    width: 100%;
+  }
+}
+
+/* Hometown Suggestions Box (Compact) */
+.hometown-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 100%;
+  background-color: var(--suggestion-bg);
+  border: 1px solid var(--suggestion-border);
+  border-radius: 0.35rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  max-height: 160px;
+  overflow-y: auto;
+  z-index: 999;
+  font-size: 0.85rem;
+}
+
+.hometown-suggestion {
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid var(--suggestion-border);
+  cursor: pointer;
+  color: var(--text-color);
+}
+
+.hometown-suggestion:last-child {
+  border-bottom: none;
+}
+
+.hometown-suggestion:hover {
+  background-color: var(--card-bg);
+}
