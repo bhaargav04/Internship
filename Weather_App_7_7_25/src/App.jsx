@@ -82,8 +82,8 @@ const App = () => {
   };
 
   return (
-    <div>
-      <div className="top-bar">
+    <div >
+      <div className="top-bar" style={{background : '#0D6EFD'}}>
         <div className="hometown-container" style={{ position: "relative" }}>
           <input
             type="text"
@@ -100,7 +100,7 @@ const App = () => {
             }}
           />
           {hometownSuggest.length > 0 && (
-            <div className="hometown-suggestions">
+            <div className="hometown-suggestions" >
               {hometownSuggest.map((city, index) => (
                 <div
                   key={index}
@@ -113,10 +113,10 @@ const App = () => {
             </div>
           )}
         </div>
-        {hometownWeather && (
-          <div className="hometown-weather">
-            <p>{hometownWeather.name}</p>
-            <p>{hometownWeather.temp}°C</p>
+        {hometown && (
+          <div className="hometown-weather" style={{ textAlign: "center", justifyContent: "center" }}>
+            <p style={{marginTop: '22px'}}>{hometownWeather.name}</p>&nbsp;
+            <p style={{marginTop: '22px'}}>{hometownWeather.temp}°C</p>
             <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
               <img src={hometownWeather.icon} alt="weather" />
               <span>{hometownWeather.condition}</span>
