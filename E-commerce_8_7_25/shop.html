@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - E-Commerce</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>My E-Commerce Store</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+  <main>
+    <h2>Shop</h2>
+    <div class="product-list" id="product-list"></div>
+  </main>
+  <footer>
+    <p>&copy; 2025 E-Commerce Store</p>
+  </footer>
+  <script>
+    async function fetchProducts() {
+      const res = await fetch('https://fakestoreapi.com/products');
+      const products = await res.json();
+      const productList = document.getElementById('product-list');
+
+      products.forEach(product => {
+        const div = document.createElement('div');
+        div.className = 'product';
+        div.innerHTML = `
+          <img src="${product.image}" alt="${product.title}">
+          <h4>${product.title}</h4>
+          <p>$${product.price}</p>
+        `;
+        productList.appendChild(div);
+      });
+    }
+    fetchProducts();
+  </script>
+</body>
+</html>
