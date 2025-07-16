@@ -1,0 +1,46 @@
+h1{
+    text-align: center;
+    margin-top: 10%;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    align-items: center;
+}
+form .form-group{
+    display: flex;
+}
+form .form-group label{
+    min-width: 50px;
+}
+table{
+    margin: 5% auto;
+    border: 1px solid black;
+    border-collapse: collapse;
+    align-self: center;
+    text-align: center;
+    /* display: flex;
+    flex-direction: column; */
+    justify-content: center;
+    align-items: center;
+}
+table td,th{
+    border: 1px solid black;
+    padding: 10px;
+}
+.btn-edit{
+    color: rgb(48, 93, 228);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: large;
+}
+.btn-delete{
+    color: rgb(199, 65, 56);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+     font-size: large;
+}
