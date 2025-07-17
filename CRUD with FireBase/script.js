@@ -3,13 +3,13 @@ import { remove, push, getDatabase, ref, onValue, set } from "https://www.gstati
 
 
 const firebaseConfig = {
-   databaseURL : "https://crud-example-eda38-default-rtdb.firebaseio.com",
-apiKey : "AIzaSyCng4K85N_iN5mGIYu5irlwX9nOFFBc7CE",
-authDomain : "crud-example-eda38.firebaseapp.com",
-projectId : "crud-example-eda38",
-storageBucket : "crud-example-eda38.firebasestorage.app",
-messagingSenderId : "351716711514",
-appId : "1:351716711514:web:c187e5b639fb655a9e0c63"
+    databaseURL: "https://crud-example-eda38-default-rtdb.firebaseio.com",
+    apiKey: "AIzaSyCng4K85N_iN5mGIYu5irlwX9nOFFBc7CE",
+    authDomain: "crud-example-eda38.firebaseapp.com",
+    projectId: "crud-example-eda38",
+    storageBucket: "crud-example-eda38.appspot.com",
+    messagingSenderId: "351716711514",
+    appId: "1:351716711514:web:c187e5b639fb655a9e0c63"
 }
 
 const app = initializeApp(firebaseConfig)
@@ -71,8 +71,8 @@ onValue(userList, function (elementValue) {
       <td>${currentUserValue.name}</td>
       <td>${currentUserValue.age}</td>
       <td>@${currentUserValue.email}</td>
-      <td><button class='btn-edit'><i class="fa-solid fa-file-edit btn-edit" data-id=${currentUserID}></i></button></td>
-      <td><button class='btn-delete'><i class="fa-solid  fa-trash btn-delete" data-id=${currentUserID}></i></button></td>
+      <td><button class='btn-edit'  data-id=${currentUserID}><i class="fa-solid fa-file-edit btn-edit"></i></button></td>
+      <td><button class='btn-delete' data-id=${currentUserID}><i class="fa-solid  fa-trash" ></i></button></td>
       </tr>`
         }
     }
@@ -85,18 +85,19 @@ document.addEventListener("click", function (e) {
     if (e.target.classList.contains('btn-edit')) {
         const id = e.target.dataset.id
         const tdElements = e.target.closest("tr").children
-        elementId1.value = id
+        elementId1.value = tdElements[0].textContent
         elementName.value = tdElements[1].textContent
         elementAge.value = tdElements[2].textContent
         elementEmail.value = tdElements[3].textContent
         // console.log('Edit', id)
     }
-    else if (e.target.classList.contains('btn-delete')) {
-        if (confirm("Confirmation for Delete the Record!")) {
-            const id = e.target.dataset.id
-            let data = ref(dataBase, `Users/${id}`)
-            remove(data)
-        }
-        // console.log('Delete', id)
+  else if (e.target.closest('.btn-delete')) {
+    const deleteBtn = e.target.closest('.btn-delete');
+    const id = deleteBtn.dataset.id;
+    if (confirm("Confirmation for Delete the Record!")) {
+        const data = ref(dataBase, `Users/${id}`);
+        remove(data);
     }
+}
+
 })
