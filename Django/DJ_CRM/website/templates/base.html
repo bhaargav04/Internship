@@ -7,11 +7,16 @@
     <title>Django CRM</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+        integrity="sha512-SzlrxWriC3gXr4h3Ff4iL4+8qXxDGy4Ck4Q4qxI1a3zszE8CA0nFddO/b1QBs7j0z0lH1SxO91Y+jrC5zjU5BA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
+
 
 <body>
     {% include 'navbar.html' %}
-    <br/>
+    <br />
     <div class="container">
         {% if messages %}
         {% for message in messages %}
@@ -21,7 +26,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
-        {% endfor%}
+        {% endfor %}
         {% endif %}
 
         {% block content %}
