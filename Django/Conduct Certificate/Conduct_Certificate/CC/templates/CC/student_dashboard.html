@@ -33,17 +33,27 @@
                 {% endif %}
             </td>
             <td>
-    {% if cert.status == "Approved" %}
+     {% if cert.status == "Pending" %}
+        <!-- Preview Button -->
+        <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-primary btn-sm">Preview</a>
+        
+        <!-- Edit Button -->
+        <a href="{% url 'conduct_request_edit' cert.id %}" class="btn btn-warning btn-sm">Edit</a>
+    
+    {% elif cert.status == "Approved" %}
+        <!-- Approved: Only View/Download -->
         <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-success btn-sm">View & Download</a>
+    
     {% else %}
-        <span class="badge bg-secondary">{{ cert.status }}</span>
+        <!-- Rejected Case -->
+        <span class="badge bg-danger">Rejected</span>
     {% endif %}
 </td>
 
         </tr>
         
         {% empty %}
-        <tr><td colspan="5">No requests found</td></tr>
+        <tr><td colspan="5" class="text-center">No requests found</td></tr>
         {% endfor %}
     </tbody>
 </table>

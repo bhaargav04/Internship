@@ -5,11 +5,12 @@
 
 <br/>
 <h2 class="text-center">Conduct Certificate Request Form</h2>
-<div class="text-left" style="display: flex; justify-content: center; align-content: center;">
+<div class="text-left bg-body-tertiary" style="display: flex; width: 50%;margin: 5px 25%;border-radius: 15px; justify-content: center; align-content: center;">
 <form method="POST" enctype="multipart/form-data" class="mt-4">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary mb-2">Submit</button>
+    
 </form>
 </div>
 

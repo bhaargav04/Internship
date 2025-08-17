@@ -116,6 +116,21 @@ def submit_conduct_certificate(request):
     return render(request, 'CC/conduct_request.html', {'form': form})
 
 
+# @login_required
 def certificate_preview(request, cert_id):
     cert = get_object_or_404(ConductCertificate, id=cert_id, student=request.user)
     return render(request, 'CC/certificate_preview.html', {'cert': cert})
+
+# @login_required
+def conduct_request_edit(request, cert_id):
+    cert = get_object_or_404(ConductCertificate, id=cert_id, student=request.user, status="Pending")
+
+    if request.method == "POST":
+        form = ConductCertificateForm(request.POST, instance=cert)
+        if form.is_valid():
+            form.save()
+            return redirect('student_dashboard')
+    else:
+        form = ConductCertificateForm(instance=cert)
+
+    return render(request, 'CC/conduct_request.html', {'form': form})

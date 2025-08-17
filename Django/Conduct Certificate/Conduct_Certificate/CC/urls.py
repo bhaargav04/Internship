@@ -14,5 +14,6 @@ urlpatterns = [
     path('conduct_request/', views.submit_conduct_certificate, name='conduct_request'),
     path('reject_certificate/<int:cert_id>/', views.reject_certificate, name='reject_certificate'),
     path('certificate_preview/<int:cert_id>/', views.certificate_preview, name='certificate_preview'),
+    path('certificate/edit/<int:cert_id>/', views.conduct_request_edit, name='conduct_request_edit'),
 
 ]
