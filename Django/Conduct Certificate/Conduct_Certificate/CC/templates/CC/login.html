@@ -1,0 +1,25 @@
+{% extends 'CC/base.html' %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow-lg p-4" style="width: 400px; border-radius: 12px;">
+    <h2 class="text-center mb-4">Login</h2>
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      
+      <div class="mb-3">
+        <input type="text" class="form-control" name="username" placeholder="Username" required>
+      </div>
+      
+      <div class="mb-3">
+        <input type="password" class="form-control" name="password" placeholder="Password" required>
+      </div>
+      
+      <div class="d-grid">
+        <button type="submit" class="btn btn-primary">Login</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'CC/base.html' %}
+{% block content %}
+<br/>
+<h2 class="text-center">My Conduct Requests</h2>
+
+<!-- Button to create a new request -->
+<a href="{% url 'conduct_request' %}" class="btn btn-info mb-2" style="margin-left: 86%;">New Request</a>
+
+<!-- Requests Table --> 
+<table class="table table-bordered table-striped" style="width: 90%; margin: auto;">
+    <thead>
+        <tr>
+            <th>Academic Year</th>
+            <th>Degree</th>
+            <th>Branch</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cert in my_requests %}
+        <tr>
+            <td>{{ cert.academic_year_from }} - {{ cert.academic_year_to }}</td>
+            <td>{{ cert.degree }}</td>
+            <td>{{ cert.branch }}</td>
+            <td>
+                {% if cert.status == "Pending" %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% elif cert.status == "Approved" %}
+                    <span class="badge bg-success">Approved</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+            <td>
+    {% if cert.status == "Approved" %}
+        <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-success btn-sm">View & Download</a>
+    {% else %}
+        <span class="badge bg-secondary">{{ cert.status }}</span>
+    {% endif %}
+</td>
+
+        </tr>
+        
+        {% empty %}
+        <tr><td colspan="5">No requests found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
