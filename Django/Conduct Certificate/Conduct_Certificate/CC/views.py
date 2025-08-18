@@ -38,7 +38,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            # Check role
+            
             if hasattr(user, 'profile') and user.profile.role == 'principal':
                 return redirect('principal_dashboard')
             else:
@@ -70,7 +70,7 @@ def student_dashboard(request):
 
 
 def principal_dashboard(request):
-    # Only principals should see this
+    
     if request.user.profile.role != 'principal':
         return redirect('home')
 
