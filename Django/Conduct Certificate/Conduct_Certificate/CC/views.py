@@ -38,23 +38,34 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            
-            if hasattr(user, 'profile') and user.profile.role == 'principal':
-                return redirect('principal_dashboard')
+            # Check user's role and redirect accordingly
+            if hasattr(user, 'profile'):
+                role = user.profile.role
+                if role == 'employee':
+                    return redirect('employee_dashboard')
+                elif role == 'hr':
+                    return redirect('hr_dashboard')
+                elif role == 'manager':
+                    return redirect('manager_dashboard')
+                else:
+                    messages.error(request, "Role not recognized.")
+                    return redirect('login')
             else:
-                return redirect('student_dashboard')
+                messages.error(request, "Profile not found for this user.")
+                return redirect('login')
         else:
             messages.error(request, "Invalid username or password")
             return redirect('login')
 
-    return render(request, 'CC/login.html')
+    return render(request, 'login.html')
+
 
 
 
 def logout_user(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
-    return render(request, 'CC/login.html')
+    return render(request, 'login.html')
 
 
 def student_dashboard(request):

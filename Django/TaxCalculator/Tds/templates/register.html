@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <style>
+        /* form{
+            background: aliceblue;
+        } */
+    </style>
+</head>
+<div class="col-md-6 offset-md-3 bg-body-tertiary w-70 mt-5 rounded-4 mb-4" >
+    <br/>
+    <h1 class="text-center">Register</h1>
+    <br />
+
+    <form method="POST" action="{% url 'register' %}" >
+        {% csrf_token %}
+
+        {% if form.errors %}
+            <div class="alert alert-warning alert-dismissible fade show " role="alert">
+                Your form has Errors
+                {% for field in form %}
+                    {% if field.errors %}
+                        {{ field.errors }}
+                    {% endif %}
+                {% endfor %}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>    
+                    </div>
+        {% endif %}
+        <div class="m-4">
+        {{ form.as_p }}
+            </div>
+        <br />
+        <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary mb-3" style="margin-left: 50px; margin-right: 50px;">Register</button>
+            </div>
+    </form>
+
+</div>
+
+{% endblock %}
