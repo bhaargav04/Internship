@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+{% load widget_tweaks %}
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">Employee Tax Dashboard</h2>
@@ -10,7 +11,7 @@
         <div class="row">
             <div class="col-md-6 mb-2">
                 <div class="card border-primary shadow-sm">
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <h6 class="card-title">Old Regime Tax</h6>
                         <p class="card-text fs-5">{{ tax_old }}</p>
                     </div>
@@ -18,7 +19,7 @@
             </div>
             <div class="col-md-6 mb-2">
                 <div class="card border-success shadow-sm">
-                    <div class="card-body">
+                    <div class="card-body text-center">
                         <h6 class="card-title">New Regime Tax</h6>
                         <p class="card-text fs-5">{{ tax_new }}</p>
                     </div>
@@ -36,7 +37,25 @@
                 Enter Your Tax Details
             </div>
             <div class="card-body">
-                {{ form.as_p }}
+
+                <!-- Loop through all fields -->
+                {% for field in form %}
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-md-6">
+                            {{ field.label_tag }}
+                            {{ field|add_class:"form-control" }}
+                        </div>
+
+                        {% if "_Utilized" in field.name %}
+                        <div class="col-md-6">
+                            <label for="{{ field.name }}_file">Upload Document</label>
+                            <input type="file" name="file" id="{{ field.name }}_file" class="form-control">
+                            <input type="hidden" name="field_name" value="{{ field.name }}">
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
             </div>
         </div>
 

@@ -89,6 +89,8 @@ class EmployeeTaxData(models.Model):
     tax_new = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
     created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
+
 
     def __str__(self):
         return f"Tax Data for {self.user.username} ({self.created_at.date()})"

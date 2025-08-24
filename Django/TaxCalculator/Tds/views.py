@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 import json
@@ -80,64 +81,89 @@ def logout_user(request):
 def manager_dashboard(request):
     return render(request, 'manager_dashboard.html')
 
+@login_required
 def hr_dashboard(request):
-    return render(request, 'hr_dashboard.html')
+    # Fetch all tax submissions with related documents
+    submissions = EmployeeTaxData.objects.select_related('user').prefetch_related('documents')
+
+    employee_data = []
+    for submission in submissions:
+        # Build a dict for documents by field name
+        documents = {doc.field_name: doc for doc in submission.documents.all()}
+
+        # Convert all Utilized fields dynamically
+        utilized_fields = {}
+        for field in EmployeeTaxData._meta.get_fields():
+            if field.name.endswith('_Utilized') or field.name in [
+                'Salary', 'BasicSalary', 'DearnessAllowance', 
+                'Exempted_HRA_amount', 'Section80cUtilized'
+            ]:
+                value = getattr(submission, field.name, None)
+                if value is not None:
+                    utilized_fields[field.verbose_name if hasattr(field, 'verbose_name') else field.name] = value
+
+        employee_data.append({
+            'employee': submission,
+            'utilized_fields': utilized_fields,
+            'documents': documents
+        })
+
+    return render(request, 'hr_dashboard.html', {'employee_data': employee_data})
 
 
 @login_required
 def employee_dashboard(request):
-    if request.method == 'POST':
-        form = EmployeeTaxDataForm(request.POST, request.FILES)
-        files = request.FILES.getlist('file')  # uploaded files
-        field_names = request.POST.getlist('field_name')  # corresponding field names
+    tax_old = tax_new = None
+    success = False
 
+    if request.method == "POST":
+        form = EmployeeTaxDataForm(request.POST)
         if form.is_valid():
-            tax_record = form.save(commit=False)
-            tax_record.user = request.user
+            # Save Employee Tax Data
+            tax_data = form.save(commit=False)
+            tax_data.user = request.user
 
-            # Get values safely
-            Salary = tax_record.Salary or Decimal('0.00')
-            BasicSalary = tax_record.BasicSalary or Decimal('0.00')
-            DearnessAllowance = tax_record.DearnessAllowance or Decimal('0.00')
+            # Calculate Tax (Replace this with your actual tax calculation)
+            tax_old = 5000  # Example
+            tax_new = 3000  # Example
+            tax_data.tax_old = tax_old
+            tax_data.tax_new = tax_new
+            tax_data.save()
 
-            # Calculate taxes
-            income_old = Salary
-            tax_old = oldtds(income_old)
-            tax_old += tax_old * Decimal('0.04')  # 4% surcharge
-            income_new = Salary
-            tax_new = NewTds(income_new)
-            tax_new += tax_new * Decimal('0.04')
+            # Loop through files and create EmployeeDocument entries
+            for field_name in form.fields:
+                if field_name.endswith("_Utilized"):
+                    file_key = f'file_{field_name}'
+                    if file_key in request.FILES:
+                        EmployeeDocument.objects.create(
+                            employee=tax_data,
+                            field_name=field_name,
+                            file=request.FILES[file_key]
+                        )
 
-            # Save computed taxes
-            tax_record.tax_old = tax_old
-            tax_record.tax_new = tax_new
-            tax_record.save()
-
-            # Save documents only for fields with utilized amount > 0
-            for field_name, file in zip(field_names, files):
-                utilized_value = getattr(tax_record, field_name, 0)
-                if utilized_value > 0:
-                    EmployeeDocument.objects.create(
-                        employee=tax_record,
-                        field_name=field_name,
-                        file=file
-                    )
-
-            return render(request, 'employee_dashboard.html', {
-                'form': EmployeeTaxDataForm(),
-                'success': True,
-                'tax_old': tax_old,
-                'tax_new': tax_new
-            })
+            success = True
+            form = EmployeeTaxDataForm()  # Clear form after save
     else:
         form = EmployeeTaxDataForm()
 
-    return render(request, 'employee_dashboard.html', {'form': form})
+    return render(request, "employee_dashboard.html", {
+        "form": form,
+        "tax_old": tax_old,
+        "tax_new": tax_new,
+        "success": success
+    })
+
 
 
 ##########################################################################
 
-
+@login_required
+def approve_tax(request, employee_id):
+    # Approve a specific employee's tax submission
+    submission = get_object_or_404(EmployeeTaxData, id=employee_id)
+    submission.approved = True  # Add this BooleanField in your model if not there yet
+    submission.save()
+    return redirect('hr_dashboard')
 
 ###########################################################################
 
