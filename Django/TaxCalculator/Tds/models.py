@@ -17,13 +17,49 @@ class Profile(models.Model):
     
 
 class EmployeeDocument(models.Model):
-    employee = models.ForeignKey('EmployeeTaxData', on_delete=models.CASCADE, related_name='documents')
-    field_name = models.CharField(max_length=100)  # e.g., "Conveyance_Utilized"
-    file = models.FileField(upload_to='employee_documents/')
-    uploaded_at = models.DateTimeField(auto_now_add=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee_documents')
+
+    # Allowance documents
+    Conveyance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    LeaveTA_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Children_Education_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Business_Communication_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Attire_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Petrol_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Furniture_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Food_Coupons_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Medical_Reimbursement_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+
+    # Deductions documents
+    Section80cUtilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80ccc_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80cccd_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80cccd1b_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80cccd2_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80d_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80d_normal_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80d_severe_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80ddb_other_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80ddb_seniorcitizen_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80e_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80ee_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80eea_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80eeb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80G_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80GGA_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80GGB_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80GGC_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80rrb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80qqb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80tta_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80ttb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80u_Normal_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section_80u_severe_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+
+    uploaded_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.employee.user.username} - {self.field_name}"
+        return f"{self.user.username} Documents"
 
     
 class EmployeeTaxData(models.Model):

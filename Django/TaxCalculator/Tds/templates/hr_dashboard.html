@@ -51,18 +51,37 @@
                                 {% endif %}
                             </div>
 
-                            <!-- Right: Inline Document Preview -->
+                            <!-- Right: Document Preview (Popup Trigger) -->
                             <div class="col-md-6">
                                 <h5 class="mb-3">Uploaded Documents</h5>
                                 {% if data.documents %}
                                     {% for field_name, doc in data.documents.items %}
-                                        <div class="mb-4">
+                                        <div class="mb-3">
                                             <h6>{{ field_name }}</h6>
-                                            {% if doc.file.url|lower|slice:"-4:" == ".pdf" %}
-                                                <embed src="{{ doc.file.url }}" type="application/pdf" width="100%" height="400px">
-                                            {% else %}
-                                                <img src="{{ doc.file.url }}" class="img-fluid border" alt="Document Preview">
-                                            {% endif %}
+                                            <a href="#" class="btn btn-primary btn-sm"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}">
+                                                View Document
+                                            </a>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}" tabindex="-1" aria-hidden="true">
+                                                <div class="modal-dialog modal-xl modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">{{ field_name }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body text-center">
+                                                            {% if doc.file.url|lower|slice:"-4:" == ".pdf" %}
+                                                                <embed src="{{ doc.file.url }}" type="application/pdf" width="100%" height="600px">
+                                                            {% else %}
+                                                                <img src="{{ doc.file.url }}" class="img-fluid border" alt="Document">
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     {% endfor %}
                                 {% else %}

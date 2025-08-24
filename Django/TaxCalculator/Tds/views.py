@@ -83,20 +83,30 @@ def manager_dashboard(request):
 
 @login_required
 def hr_dashboard(request):
-    # Fetch all tax submissions with related documents
-    submissions = EmployeeTaxData.objects.select_related('user').prefetch_related('documents')
-
+    submissions = EmployeeTaxData.objects.select_related('user').all()
     employee_data = []
-    for submission in submissions:
-        # Build a dict for documents by field name
-        documents = {doc.field_name: doc for doc in submission.documents.all()}
 
-        # Convert all Utilized fields dynamically
+    for submission in submissions:
+        # Get the document row for this user
+        try:
+            documents_obj = submission.user.employee_documents
+        except EmployeeDocument.DoesNotExist:
+            documents_obj = None
+
+        # Convert EmployeeDocument fields to a dictionary
+        documents = {}
+        if documents_obj:
+            for field in EmployeeDocument._meta.get_fields():
+                if field.name.endswith("_Doc"):
+                    file_obj = getattr(documents_obj, field.name)
+                    if file_obj:
+                        documents[field.name] = file_obj
+
+        # Convert all _Utilized fields dynamically
         utilized_fields = {}
         for field in EmployeeTaxData._meta.get_fields():
             if field.name.endswith('_Utilized') or field.name in [
-                'Salary', 'BasicSalary', 'DearnessAllowance', 
-                'Exempted_HRA_amount', 'Section80cUtilized'
+                'Salary', 'BasicSalary', 'DearnessAllowance', 'Exempted_HRA_amount', 'Section80cUtilized'
             ]:
                 value = getattr(submission, field.name, None)
                 if value is not None:
@@ -117,32 +127,32 @@ def employee_dashboard(request):
     success = False
 
     if request.method == "POST":
-        form = EmployeeTaxDataForm(request.POST)
+        form = EmployeeTaxDataForm(request.POST, request.FILES)
+
         if form.is_valid():
-            # Save Employee Tax Data
+            # 🔹 Save employee tax data
             tax_data = form.save(commit=False)
             tax_data.user = request.user
 
-            # Calculate Tax (Replace this with your actual tax calculation)
-            tax_old = 5000  # Example
-            tax_new = 3000  # Example
+            # 🔹 Example tax calculation (replace with your real logic)
+            tax_old = 5000
+            tax_new = 3000
             tax_data.tax_old = tax_old
             tax_data.tax_new = tax_new
             tax_data.save()
 
-            # Loop through files and create EmployeeDocument entries
-            for field_name in form.fields:
-                if field_name.endswith("_Utilized"):
-                    file_key = f'file_{field_name}'
-                    if file_key in request.FILES:
-                        EmployeeDocument.objects.create(
-                            employee=tax_data,
-                            field_name=field_name,
-                            file=request.FILES[file_key]
-                        )
+            # 🔹 Get or create EmployeeDocument for this user
+            documents, created = EmployeeDocument.objects.get_or_create(user=request.user)
+
+            # 🔹 Loop over all uploaded files and assign them to corresponding fields
+            for field_name, uploaded_file in request.FILES.items():
+                if uploaded_file and field_name.endswith("_Doc"):
+                    setattr(documents, field_name, uploaded_file)
+
+            documents.save()
 
             success = True
-            form = EmployeeTaxDataForm()  # Clear form after save
+            form = EmployeeTaxDataForm()  # Reset form after saving
     else:
         form = EmployeeTaxDataForm()
 
@@ -152,7 +162,6 @@ def employee_dashboard(request):
         "tax_new": tax_new,
         "success": success
     })
-
 
 
 ##########################################################################

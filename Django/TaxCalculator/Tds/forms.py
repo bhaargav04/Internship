@@ -50,4 +50,45 @@ class EmployeeTaxDataForm(forms.ModelForm):
 class EmployeeDocumentForm(forms.ModelForm):
     class Meta:
         model = EmployeeDocument
-        fields = ['field_name', 'file']
+        fields = [
+            # Allowance documents
+            'Conveyance_Utilized_Doc',
+            'LeaveTA_Utilized_Doc',
+            'Children_Education_Allowance_Utilized_Doc',
+            'Business_Communication_Allowance_Utilized_Doc',
+            'Attire_Allowance_Utilized_Doc',
+            'Petrol_Allowance_Utilized_Doc',
+            'Furniture_Allowance_Utilized_Doc',
+            'Food_Coupons_Utilized_Doc',
+            'Medical_Reimbursement_Utilized_Doc',
+
+            # Deductions documents
+            'Section80cUtilized_Doc',
+            'Section80ccc_Utilized_Doc',
+            'Section80cccd_Utilized_Doc',
+            'Section80cccd1b_Utilized_Doc',
+            'Section80cccd2_Utilized_Doc',
+            'Section80d_Utilized_Doc',
+            'Section80d_normal_Utilized_Doc',
+            'Section80d_severe_Utilized_Doc',
+            'Section80ddb_other_Utilized_Doc',
+            'Section80ddb_seniorcitizen_Utilized_Doc',
+            'Section_80e_Doc',
+            'Section_80ee_Doc',
+            'Section_80eea_Doc',
+            'Section_80eeb_Doc',
+            'Section_80G_Doc',
+            'Section_80GGA_Doc',
+            'Section_80GGB_Doc',
+            'Section_80GGC_Doc',
+            'Section_80rrb_Doc',
+            'Section_80qqb_Doc',
+            'Section_80tta_Doc',
+            'Section_80ttb_Doc',
+            'Section_80u_Normal_Doc',
+            'Section_80u_severe_Doc',
+        ]
+        widgets = {
+            field: forms.ClearableFileInput(attrs={'class': 'form-control'})
+            for field in fields
+        }
