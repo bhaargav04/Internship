@@ -7,99 +7,108 @@
     <h2 class="text-center mb-4">HR Tax Approval Dashboard</h2>
 
     {% if employee_data %}
-        <div class="accordion" id="employeeAccordion">
-            {% for data in employee_data %}
-            <div class="accordion-item mb-3 shadow-sm">
-                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
-                            aria-controls="collapse{{ forloop.counter }}">
-                        {{ data.employee.user.username }}
-                        <small class="ms-2 text-muted">(Submitted on {{ data.employee.created_at|date:"d M Y H:i" }})</small>
-                    </button>
-                </h2>
+    <div class="accordion" id="employeeAccordion">
+        {% for data in employee_data %}
+        <div class="accordion-item mb-3 shadow-sm">
+            <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
+                    aria-controls="collapse{{ forloop.counter }}">
+                    {{ data.employee.user.username }}
+                    <small class="ms-2 text-muted">(Submitted on {{ data.employee.created_at|date:"d M Y H:i" }})</small>
+                </button>
+            </h2>
 
-                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
-                     aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#employeeAccordion">
-                    <div class="accordion-body">
-                        <div class="row">
-                            <!-- Left: Tax Input Data -->
-                            <div class="col-md-6">
-                                <h5 class="mb-3">Utilized Tax Details</h5>
-                                <table class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Field Name</th>
-                                            <th>Utilized Amount</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for field_name, value in data.utilized_fields.items %}
-                                        <tr>
-                                            <td>{{ field_name }}</td>
-                                            <td>{{ value }}</td>
-                                        </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+            <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse"
+                aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#employeeAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Left: Tax Input Data -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Utilized Tax Details</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Utilized Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for field_name, value in data.utilized_fields.items %}
+                                    <tr>
+                                        <td>{{ field_name }}</td>
+                                        <td>{{ value }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
 
-                                {% if not data.employee.approved %}
-                                <form method="POST" action="{% url 'approve_tax' data.employee.id %}">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success mt-2">Approve Tax</button>
-                                </form>
-                                {% else %}
-                                    <span class="badge bg-success mt-2">Approved</span>
-                                {% endif %}
-                            </div>
+                            {% if not data.employee.approved %}
+                            <form method="POST" action="{% url 'approve_tax' data.employee.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success mt-2">Approve Tax</button>
+                            </form>
+                            {% else %}
+                            <span class="badge bg-success mt-2">Approved</span>
+                            {% endif %}
+                        </div>
 
-                            <!-- Right: Document Preview -->
-                            <div class="col-md-6">
-                                <h5 class="mb-3">Uploaded Documents</h5>
-                                {% if data.documents %}
-                                    {% for field_name, doc in data.documents.items %}
-                                        <div class="mb-3">
-                                            <h6>{{ field_name }}</h6>
-                                            <a href="#" class="btn btn-primary btn-sm"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}">
-                                                View Document
-                                            </a>
+                        <!-- Right: Document Preview -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Uploaded Documents</h5>
+                            {% if data.documents %}
+                            {% for field_name, doc in data.documents.items %}
+                            <div class="mb-3">
+                                <h6>{{ field_name }}</h6>
+                                <a href="{{ doc.file.url }}" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}">
+                                    View Document
+                                </a>
 
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}" tabindex="-1" aria-hidden="true">
-                                                <div class="modal-dialog modal-xl modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title">{{ field_name }}</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                                        </div>
-                                                        <div class="modal-body text-center">
-                                                            {% if doc.file.url|lower|endswith:".pdf" %}
-                                                                <iframe src="{{ doc.file.url }}" width="100%" height="600px" style="border:none;"></iframe>
-                                                            {% elif doc.file.url|lower|endswith:".jpg" or doc.file.url|lower|endswith:".jpeg" or doc.file.url|lower|endswith:".png" %}
-                                                                <img src="{{ doc.file.url }}" class="img-fluid border" alt="Document">
-                                                            {% else %}
-                                                                <p>No preview available. <a href="{{ doc.file.url }}" target="_blank">Download File</a></p>
-                                                            {% endif %}
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal{{ forloop.parentloop.counter }}{{ forloop.counter }}" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">{{ field_name }}</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                {% if doc.file.url|lower|endswith:".pdf" %}
+                                                <iframe src="{{ doc.file.url }}" width="100%" height="600px"
+                                                    style="border:none;"></iframe>
+                                                {% elif doc.file.url|lower|endswith:".jpg" or
+                                                doc.file.url|lower|endswith:".jpeg" or
+                                                doc.file.url|lower|endswith:".png" %}
+                                                <img src="{{ doc.file.url }}" class="img-fluid border" alt="Document">
+                                                {% else %}
+                                                <p>No preview available. <a href="{{ doc.file.url }}" download>Download
+                                                        File</a></p>
+                                                {% endif %}
                                             </div>
                                         </div>
-                                    {% endfor %}
-                                {% else %}
-                                    <p>No documents uploaded.</p>
-                                {% endif %}
+                                    </div>
+                                </div>
                             </div>
+                            {% endfor %}
+                            {% else %}
+                            <p>No documents uploaded.</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
     {% else %}
-        <p class="text-center">No tax submissions yet.</p>
+    <p class="text-center">No tax submissions yet.</p>
     {% endif %}
 </div>
 {% endblock %}

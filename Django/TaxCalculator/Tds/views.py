@@ -78,8 +78,45 @@ def logout_user(request):
     messages.success(request, "You have been logged out successfully.")
     return render(request, 'login.html')
 
+@login_required
 def manager_dashboard(request):
-    return render(request, 'manager_dashboard.html')
+    submissions = EmployeeTaxData.objects.select_related('user').all()
+    employee_data = []
+
+    for submission in submissions:
+        # Get documents for this employee
+        try:
+            documents_obj = submission.user.employee_documents
+        except EmployeeDocument.DoesNotExist:
+            documents_obj = None
+
+        documents = {}
+        if documents_obj:
+            for field in EmployeeDocument._meta.get_fields():
+                if field.name.endswith("_Doc"):
+                    file_obj = getattr(documents_obj, field.name)
+                    if file_obj:
+                        documents[field.name] = file_obj
+
+        # Collect utilized fields
+        utilized_fields = {}
+        for field in EmployeeTaxData._meta.get_fields():
+            if field.name.endswith('_Utilized') or field.name in [
+                'Salary', 'BasicSalary', 'DearnessAllowance', 'Exempted_HRA_amount', 'Section80cUtilized'
+            ]:
+                value = getattr(submission, field.name, None)
+                if value is not None:
+                    utilized_fields[
+                        field.verbose_name if hasattr(field, 'verbose_name') else field.name
+                    ] = value
+
+        employee_data.append({
+            'employee': submission,
+            'utilized_fields': utilized_fields,
+            'documents': documents
+        })
+
+    return render(request, 'manager_dashboard.html', {'employee_data': employee_data})
 
 @login_required
 def hr_dashboard(request):
