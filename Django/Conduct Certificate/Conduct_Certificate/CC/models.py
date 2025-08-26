@@ -20,6 +20,13 @@ class ConductCertificate(models.Model):
         ('Rejected', 'Rejected'),
     ]
 
+    TEMPLATE_CHOICES = [
+        ('template1', 'Template 1'),
+        ('template2', 'Template 2'),
+        ('template3', 'Template 3'),
+        ('template4', 'Template 4'),
+    ]
+
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
     academic_year_from = models.IntegerField()
@@ -29,6 +36,7 @@ class ConductCertificate(models.Model):
     signature = models.ImageField(upload_to='signatures/')
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
     principal_signature = models.ImageField(upload_to='principal_signatures/', blank=True, null=True)
+    template_choice = models.CharField(max_length=20, choices=TEMPLATE_CHOICES, default='template1')  # 🔥 Added
 
     def __str__(self):
         return f"{self.name} - {self.status}"

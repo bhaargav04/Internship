@@ -38,34 +38,23 @@ def login_user(request):
         if user is not None:
             login(request, user)
 
-            # Check user's role and redirect accordingly
-            if hasattr(user, 'profile'):
-                role = user.profile.role
-                if role == 'employee':
-                    return redirect('employee_dashboard')
-                elif role == 'hr':
-                    return redirect('hr_dashboard')
-                elif role == 'manager':
-                    return redirect('manager_dashboard')
-                else:
-                    messages.error(request, "Role not recognized.")
-                    return redirect('login')
+            
+            if hasattr(user, 'profile') and user.profile.role == 'principal':
+                return redirect('principal_dashboard')
             else:
-                messages.error(request, "Profile not found for this user.")
-                return redirect('login')
+                return redirect('student_dashboard')
         else:
             messages.error(request, "Invalid username or password")
             return redirect('login')
 
-    return render(request, 'login.html')
-
+    return render(request, 'CC/login.html')
 
 
 
 def logout_user(request):
     logout(request)
     messages.success(request, "You have been logged out successfully.")
-    return render(request, 'login.html')
+    return render(request, 'CC/login.html')
 
 
 def student_dashboard(request):
@@ -102,7 +91,10 @@ def approve_certificate(request, cert_id):
     else:
         form = ApproveCertificateForm(instance=cert)
 
-    return render(request, "CC/approve_certificate.html", {"form": form, "cert": cert})
+    # Load selected template dynamically
+    template_name = f"CC/{cert.template_choice}.html"
+    
+    return render(request, template_name, {"form": form, "cert": cert})
 
 def reject_certificate(request, cert_id):
     if request.user.profile.role != 'principal':
@@ -129,15 +121,21 @@ def submit_conduct_certificate(request):
 
 # @login_required
 def certificate_preview(request, cert_id):
-    cert = get_object_or_404(ConductCertificate, id=cert_id, student=request.user)
-    return render(request, 'CC/certificate_preview.html', {'cert': cert})
+    cert = get_object_or_404(ConductCertificate, id=cert_id)
+    
+    # Only allow student owner or principal to view
+    if request.user.profile.role == 'student' and cert.student != request.user:
+        return redirect('home')
+
+    template_name = f"CC/{cert.template_choice}.html"
+    return render(request, template_name, {'cert': cert})
 
 # @login_required
 def conduct_request_edit(request, cert_id):
     cert = get_object_or_404(ConductCertificate, id=cert_id, student=request.user, status="Pending")
 
     if request.method == "POST":
-        form = ConductCertificateForm(request.POST, instance=cert)
+        form = ConductCertificateForm(request.POST, request.FILES, instance=cert)
         if form.is_valid():
             form.save()
             return redirect('student_dashboard')

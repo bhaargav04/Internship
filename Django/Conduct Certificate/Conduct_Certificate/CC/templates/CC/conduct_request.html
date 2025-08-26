@@ -1,19 +1,41 @@
 {% extends 'CC/base.html' %}
-{% block content %}
-
 {% load static %}
-
+{% block content %}
 <br/>
-<h2 class="text-center">Conduct Certificate Request Form</h2>
-<div class="text-left bg-body-tertiary" style="display: flex; width: 50%;margin: 5px 25%;border-radius: 15px; justify-content: center; align-content: center;">
-<form method="POST" enctype="multipart/form-data" class="mt-4">
+<h2 class="text-center">Conduct Certificate Request</h2>
+<div class="text-left bg-body-tertiary" 
+     style="display: flex; width: 50%; margin: 5px auto; border-radius: 15px; justify-content: center; align-content: center;">
+  <form method="POST" enctype="multipart/form-data" class="mt-4">
     {% csrf_token %}
-    {{ form.as_p }}
+    {{ form.name.label }} {{ form.name }}<br> </br>
+    {{ form.academic_year_from.label }} {{ form.academic_year_from }}<br></br>
+    {{ form.academic_year_to.label }} {{ form.academic_year_to }}<br></br>
+    {{ form.degree.label }} {{ form.degree }}<br></br>
+    {{ form.branch.label }} {{ form.branch }}<br></br>
+    {{ form.signature.label }} {{ form.signature }}<br>
+
+    <label class="mt-3">Select Certificate Template:</label>
+    <div style="display: flex; gap: 15px; margin-top: 10px;">
+      <label>
+        <input type="radio" name="template_choice" value="template1" {% if form.initial.template_choice == 'template1' %}checked{% endif %}>
+        <label for="">Template 1</label>
+      </label>
+      <label>
+        <input type="radio" name="template_choice" value="template2" {% if form.initial.template_choice == 'template2' %}checked{% endif %}>
+       <label for="">Template 2</label>
+      </label>
+      <label>
+        <input type="radio" name="template_choice" value="template3" {% if form.initial.template_choice == 'template3' %}checked{% endif %}>
+        <label for="">Template 3</label>
+      </label>
+      <label>
+        <input type="radio" name="template_choice" value="template4" {% if form.initial.template_choice == 'template4' %}checked{% endif %}>
+        <label for="">Template 4</label>
+      </label>
+    </div>
+
+    <br>
     <button type="submit" class="btn btn-primary mb-2">Submit</button>
-    
-</form>
+  </form>
 </div>
-
-
-
 {% endblock %}

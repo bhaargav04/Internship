@@ -36,7 +36,7 @@ class SignUpForm(UserCreationForm):
 class ConductCertificateForm(forms.ModelForm):
     class Meta:
         model = ConductCertificate
-        fields = ['name', 'academic_year_from', 'academic_year_to', 'degree', 'branch', 'signature']
+        fields = ['name', 'academic_year_from', 'academic_year_to', 'degree', 'branch', 'signature', 'template_choice']
         widgets = {
             'academic_year_from': forms.NumberInput(attrs={'placeholder': 'YYYY'}),
             'academic_year_to': forms.NumberInput(attrs={'placeholder': 'YYYY'}),
