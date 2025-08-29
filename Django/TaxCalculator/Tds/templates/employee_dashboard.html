@@ -2,68 +2,185 @@
 {% block content %}
 {% load widget_tweaks %}
 
-<div class="container mt-5">
-    <h2 class="text-center mb-4">Employee Tax Dashboard</h2>
+<style>
+/* ===== Global Styling ===== */
+body {
+ background: linear-gradient(135deg, var(--color1), var(--color4));
+  font-family: 'Segoe UI', sans-serif;
+  color: var(--color2);
+}
 
-    {% if success %}
-    <div class="alert alert-success shadow-sm">
-        <h5 class="mb-3">Tax Calculated & Saved!</h5>
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                <div class="card border-primary shadow-sm">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">Old Regime Tax</h6>
-                        <p class="card-text fs-5">{{ tax_old }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-2">
-                <div class="card border-success shadow-sm">
-                    <div class="card-body text-center">
-                        <h6 class="card-title">New Regime Tax</h6>
-                        <p class="card-text fs-5">{{ tax_new }}</p>
-                    </div>
-                </div>
-            </div>
+/* ===== Page Title ===== */
+.page-title {
+  color: var(--color2);
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 2.5rem;
+}
+
+/* ===== Alert Styling ===== */
+.alert-custom {
+  background-color: var(--color4);
+  color: var(--color2);
+  border-radius: 16px;
+  padding: 1.8rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+/* ===== Tax Cards ===== */
+.tax-card {
+  border-radius: 18px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.tax-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 35px rgba(0,0,0,0.15);
+}
+.tax-card h6 {
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  font-size: 1.1rem;
+}
+.tax-card p {
+  font-size: 1.8rem;
+  font-weight: 800;
+}
+.tax-old {
+  background: var(--color2);
+  color: #fff;
+}
+.tax-new {
+  background: var(--color3);
+  color: #fff;
+}
+
+/* ===== Form Card ===== */
+.form-card {
+  border-radius: 18px;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.08);
+  overflow: hidden;
+  background-color: var(--color4); /* Light cream background */
+}
+.form-card .card-header {
+  background: var(--color2);
+  color: white;
+  font-weight: 700;
+  font-size: 1.3rem;
+  padding: 1rem;
+  letter-spacing: 0.5px;
+}
+
+/* ===== Form Fields ===== */
+.form-label-custom {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  color: var(--color2);
+  display: block;
+}
+.form-control-custom {
+  background-color: #fff; /* White input field */
+  border: 1px solid var(--color3);
+  color: var(--color2);
+  border-radius: 10px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+.form-control-custom:focus {
+  border-color: var(--color2);
+  box-shadow: 0 0 5px var(--color2);
+  outline: none;
+}
+
+/* ===== Buttons ===== */
+.btn-custom {
+  background-color: var(--color2);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50px;
+  padding: 0.8rem 2rem;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.btn-custom:hover {
+  background-color: #8f9e86;
+  transform: translateY(-3px);
+}
+</style>
+
+<div class="container py-5">
+  <h2 class="text-center page-title">Employee Tax Dashboard</h2>
+
+  {% if success %}
+  <div class="alert alert-custom mb-5">
+    <h5 class="mb-4 fw-bold">✅ Tax Calculated & Saved!</h5>
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="tax-card tax-old">
+          <h6>Old Regime Tax</h6>
+          <p>{{ tax_old }}</p>
         </div>
+      </div>
+      <div class="col-md-6">
+        <div class="tax-card tax-new">
+          <h6>New Regime Tax</h6>
+          <p>{{ tax_new }}</p>
+        </div>
+      </div>
     </div>
-    {% endif %}
+  </div>
+  {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
 
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white">
-                Enter Your Tax Details & Upload Documents
-            </div>
-            <div class="card-body">
-
-                {% for field in form %}
-                <div class="row mb-3 align-items-center">
-                    <div class="col-md-6">
-                        {{ field.label_tag }}
-                        {{ field|add_class:"form-control" }}
-                    </div>
-
-                    {% if "_Utilized" in field.name %}
-                    <div class="col-md-6">
-                        <label for="{{ field.name }}_Doc">Upload Document</label>
-                        <input type="file" 
-                               name="{{ field.name }}_Doc" 
-                               id="{{ field.name }}_Doc" 
-                               class="form-control">
-                    </div>
-                    {% endif %}
-                </div>
-                {% endfor %}
-
-            </div>
+    <!-- Tax Details Section -->
+    <div class="card form-card mb-5">
+      <div class="card-header">Enter Your Tax Details</div>
+      <div class="card-body">
+        <div class="row g-4">
+          {% for field in form %}
+            {% if field.name != "approve" %}
+              <div class="col-md-6">
+                <label for="{{ field.id_for_label }}" class="form-label-custom">{{ field.label }}</label>
+                {{ field|add_class:"form-control form-control-custom" }}
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
+      </div>
+    </div>
 
-        <div class="text-center">
-            <button type="submit" class="btn btn-lg btn-primary">Calculate & Save</button>
+    <!-- Upload Documents Section -->
+    <div class="card form-card mb-5">
+      <div class="card-header">Upload Supporting Documents</div>
+      <div class="card-body">
+        <div class="row g-4">
+          {% for field in form %}
+            {% if "_Utilized" in field.name %}
+              <div class="col-md-6">
+                <label for="{{ field.name }}_Doc" class="form-label-custom">
+                  Document for {{ field.label }}
+                </label>
+                <input type="file" 
+                       name="{{ field.name }}_Doc" 
+                       id="{{ field.name }}_Doc" 
+                       class="form-control form-control-custom">
+              </div>
+            {% endif %}
+          {% endfor %}
         </div>
-    </form>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="text-center mt-5">
+      <button type="submit" class="btn btn-custom btn-lg">💾 Calculate & Save</button>
+    </div>
+  </form>
 </div>
 
 {% endblock %}

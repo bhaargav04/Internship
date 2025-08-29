@@ -40,7 +40,7 @@ class SignUpForm(UserCreationForm):
 class EmployeeTaxDataForm(forms.ModelForm):
     class Meta:
         model = EmployeeTaxData
-        exclude = ['user', 'tax_old', 'tax_new', 'created_at']
+        exclude = ['user', 'tax_old', 'tax_new', 'created_at', 'approved']
         widgets = {
             field: forms.NumberInput(attrs={'class': 'form-control'}) 
             for field in model._meta.get_fields()

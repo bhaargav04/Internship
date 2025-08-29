@@ -1,0 +1,955 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tax Calculator</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Home</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        
+        <a class="nav-link active" aria-current="page" href="/register/">Register</a>
+       
+        <a class="nav-link bg-danger" href="/logout/" style="border-radius: 10px; margin-left: 1030px;">Logout</a>
+        
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+  
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">HR Tax Approval Dashboard</h2>
+
+    
+    <div class="accordion" id="employeeAccordion">
+        
+        <div class="accordion-item mb-3 shadow-sm">
+            <h2 class="accordion-header" id="heading1">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse1" aria-expanded="false"
+                    aria-controls="collapse1">
+                    employee01
+                    <small class="ms-2 text-muted">(Submitted on 24 Aug 2025 16:40)</small>
+                </button>
+            </h2>
+
+            <div id="collapse1" class="accordion-collapse collapse"
+                aria-labelledby="heading1" data-bs-parent="#employeeAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Left: Tax Input Data -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Utilized Tax Details</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Utilized Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>Salary</td>
+                                        <td>12121212.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>BasicSalary</td>
+                                        <td>121212.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>DearnessAllowance</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Conveyance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>LeaveTA Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Children Education Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Business Communication Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Attire Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Petrol Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Furniture Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Food Coupons Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Medical Reimbursement Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Exempted HRA amount</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cUtilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ccc Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd1b Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd2 Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d normal Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d severe Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb other Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb seniorcitizen Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            
+                            <form method="POST" action="/approve_tax/1/">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="Bw4fGABFz0U0Vqx7HdjOJMxKPftVTVWqB7pjSVHgBDEevqRHh5rXwpWxq49gfAJc">
+                                <button type="submit" class="btn btn-success mt-2">Approve Tax</button>
+                            </form>
+                            
+                        </div>
+
+                        <!-- Right: Document Preview -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Uploaded Documents</h5>
+                            
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_other_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal11">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal11" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_other_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_seniorcitizen_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal12">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal12" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_seniorcitizen_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item mb-3 shadow-sm">
+            <h2 class="accordion-header" id="heading2">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse2" aria-expanded="false"
+                    aria-controls="collapse2">
+                    employee02
+                    <small class="ms-2 text-muted">(Submitted on 24 Aug 2025 16:46)</small>
+                </button>
+            </h2>
+
+            <div id="collapse2" class="accordion-collapse collapse"
+                aria-labelledby="heading2" data-bs-parent="#employeeAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Left: Tax Input Data -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Utilized Tax Details</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Utilized Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>Salary</td>
+                                        <td>100000.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>BasicSalary</td>
+                                        <td>10000.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>DearnessAllowance</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Conveyance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>LeaveTA Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Children Education Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Business Communication Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Attire Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Petrol Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Furniture Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Food Coupons Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Medical Reimbursement Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Exempted HRA amount</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cUtilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ccc Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd1b Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd2 Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d normal Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d severe Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb other Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb seniorcitizen Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            
+                            <span class="badge bg-success mt-2">Approved</span>
+                            
+                        </div>
+
+                        <!-- Right: Document Preview -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Uploaded Documents</h5>
+                            
+                            
+                            <div class="mb-3">
+                                <h6>Conveyance_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal21">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal21" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Conveyance_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>LeaveTA_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal22">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal22" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">LeaveTA_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item mb-3 shadow-sm">
+            <h2 class="accordion-header" id="heading3">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse3" aria-expanded="false"
+                    aria-controls="collapse3">
+                    employee01
+                    <small class="ms-2 text-muted">(Submitted on 24 Aug 2025 17:06)</small>
+                </button>
+            </h2>
+
+            <div id="collapse3" class="accordion-collapse collapse"
+                aria-labelledby="heading3" data-bs-parent="#employeeAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Left: Tax Input Data -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Utilized Tax Details</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Utilized Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>Salary</td>
+                                        <td>33333.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>BasicSalary</td>
+                                        <td>33333.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>DearnessAllowance</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Conveyance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>LeaveTA Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Children Education Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Business Communication Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Attire Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Petrol Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Furniture Allowance Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Food Coupons Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Medical Reimbursement Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Exempted HRA amount</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cUtilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ccc Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd1b Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd2 Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d normal Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d severe Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb other Utilized</td>
+                                        <td>3.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb seniorcitizen Utilized</td>
+                                        <td>33.00</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            
+                            <form method="POST" action="/approve_tax/3/">
+                                <input type="hidden" name="csrfmiddlewaretoken" value="Bw4fGABFz0U0Vqx7HdjOJMxKPftVTVWqB7pjSVHgBDEevqRHh5rXwpWxq49gfAJc">
+                                <button type="submit" class="btn btn-success mt-2">Approve Tax</button>
+                            </form>
+                            
+                        </div>
+
+                        <!-- Right: Document Preview -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Uploaded Documents</h5>
+                            
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_other_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal31">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal31" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_other_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_seniorcitizen_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal32">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal32" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_seniorcitizen_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="accordion-item mb-3 shadow-sm">
+            <h2 class="accordion-header" id="heading4">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse4" aria-expanded="false"
+                    aria-controls="collapse4">
+                    employee03
+                    <small class="ms-2 text-muted">(Submitted on 24 Aug 2025 17:13)</small>
+                </button>
+            </h2>
+
+            <div id="collapse4" class="accordion-collapse collapse"
+                aria-labelledby="heading4" data-bs-parent="#employeeAccordion">
+                <div class="accordion-body">
+                    <div class="row">
+                        <!-- Left: Tax Input Data -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Utilized Tax Details</h5>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Field Name</th>
+                                        <th>Utilized Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                    <tr>
+                                        <td>Salary</td>
+                                        <td>1200000.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>BasicSalary</td>
+                                        <td>1211212.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>DearnessAllowance</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Conveyance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>LeaveTA Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Children Education Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Business Communication Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Attire Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Petrol Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Furniture Allowance Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Food Coupons Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Medical Reimbursement Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Exempted HRA amount</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cUtilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ccc Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd1b Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80cccd2 Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d normal Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80d severe Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb other Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td>Section80ddb seniorcitizen Utilized</td>
+                                        <td>4.00</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                            
+                            <span class="badge bg-success mt-2">Approved</span>
+                            
+                        </div>
+
+                        <!-- Right: Document Preview -->
+                        <div class="col-md-6">
+                            <h5 class="mb-3">Uploaded Documents</h5>
+                            
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_other_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal41">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal41" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_other_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>Section80ddb_seniorcitizen_Utilized_Doc</h6>
+                                <a href="" class="btn btn-success btn-sm" download>
+                                    Download Document
+                                </a>
+                                <a href="#" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#docModal42">
+                                    View Document
+                                </a>
+
+                                <!-- Modal -->
+                                <div class="modal fade"
+                                    id="docModal42" tabindex="-1"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Section80ddb_seniorcitizen_Utilized_Doc</h5>
+                                                <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body text-center">
+                                                
+                                                <p>No preview available. <a href="" download>Download
+                                                        File</a></p>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    
+</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

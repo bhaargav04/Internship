@@ -11,6 +11,8 @@ from .forms import SignUpForm, EmployeeTaxDataForm
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
+import os
+from django.conf import settings
 
 
 
@@ -120,26 +122,26 @@ def manager_dashboard(request):
 
 @login_required
 def hr_dashboard(request):
-    submissions = EmployeeTaxData.objects.select_related('user').all()
+    submissions = EmployeeTaxData.objects.select_related('user').order_by('-created_at')  # newest first
     employee_data = []
 
     for submission in submissions:
-        # Get the document row for this user
         try:
             documents_obj = submission.user.employee_documents
         except EmployeeDocument.DoesNotExist:
             documents_obj = None
 
-        # Convert EmployeeDocument fields to a dictionary
-        documents = {}
+        documents_dict = {}
         if documents_obj:
             for field in EmployeeDocument._meta.get_fields():
                 if field.name.endswith("_Doc"):
                     file_obj = getattr(documents_obj, field.name)
                     if file_obj:
-                        documents[field.name] = file_obj
+                        documents_dict[field.name] = {
+                            "url": file_obj.url,
+                            "name": file_obj.name.split('/')[-1]
+                        }
 
-        # Convert all _Utilized fields dynamically
         utilized_fields = {}
         for field in EmployeeTaxData._meta.get_fields():
             if field.name.endswith('_Utilized') or field.name in [
@@ -152,7 +154,7 @@ def hr_dashboard(request):
         employee_data.append({
             'employee': submission,
             'utilized_fields': utilized_fields,
-            'documents': documents
+            'documents': documents_dict
         })
 
     return render(request, 'hr_dashboard.html', {'employee_data': employee_data})
@@ -210,6 +212,53 @@ def approve_tax(request, employee_id):
     submission.approved = True  # Add this BooleanField in your model if not there yet
     submission.save()
     return redirect('hr_dashboard')
+
+def employee_report(request, pk):
+    employee = get_object_or_404(EmployeeTaxData, id=pk)
+
+    labels = []
+    utilized = []
+    remaining = []
+    percent_utilized = []
+
+    # Dynamically get all _Utilized fields
+    for field in EmployeeTaxData._meta.get_fields():
+        if field.name.endswith("_Utilized"):
+            labels.append(field.verbose_name if field.verbose_name else field.name)
+            
+            val = getattr(employee, field.name, 0) or 0
+            if not isinstance(val, Decimal):
+                val = Decimal(val)
+            utilized.append(float(val))
+
+            max_field = field.name.replace("_Utilized", "_Max")
+            max_val = getattr(employee, max_field, 0) or 0
+            if not isinstance(max_val, Decimal):
+                max_val = Decimal(max_val)
+
+            rem = max_val - val
+            remaining.append(float(rem))
+            percent_utilized.append(float((val / max_val) * 100) if max_val > 0 else 0)
+
+    # Zip data into a list of dictionaries for easy template iteration
+    progress_data = [
+        {"label": label, "percent": percent}
+        for label, percent in zip(labels, percent_utilized)
+    ]
+
+    total_utilized = sum(utilized)
+    total_remaining = sum(remaining)
+
+    context = {
+        "employee": employee,
+        "labels": labels,
+        "utilized": utilized,
+        "remaining": remaining,
+        "progress_data": progress_data,
+        "total_utilized": total_utilized,
+        "total_remaining": total_remaining,
+    }
+    return render(request, "employee_report.html", context)
 
 ###########################################################################
 

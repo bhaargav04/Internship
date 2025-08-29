@@ -1,78 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
 <style>
-  .center-container {
+  body {
+    background: var(--color1);
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .hero-section {
+    min-height: 90vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
-    /* background: linear-gradient(135deg, #f8ffae 0%, #43c6ac 100%); */
+    background: linear-gradient(135deg, var(--color1), var(--color4));
+    padding: 20px;
   }
+
   .custom-card {
-    width: 22rem;
-    border-radius: 18px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    background: #fffbe6;
+    width: 24rem;
     border: none;
-    padding: 2rem 1.5rem;
-    transition: transform 0.2s;
+    border-radius: 20px;
+    background: var(--color4);
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease-in-out;
   }
+
   .custom-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.12);
   }
+
   .card-title {
     font-size: 2rem;
     font-weight: 700;
-    color: #343a40;
-    margin-bottom: 0.5rem;
+    color: var(--color2);
   }
-  .card-subtitle {
-    font-size: 1.1rem;
-    color: #6c757d;
-    margin-bottom: 1.2rem;
-  }
-  .action-links {
-    display: flex;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-top: 1rem;
-  }
-  .custom-link {
+
+  .custom-btn {
     display: inline-block;
-    padding: 0.5rem 1.2rem;
-    background: white;
-    color: #000;
-    border-radius: 8px;
-    text-decoration: none;
+    padding: 0.6rem 1.5rem;
+    background: var(--color2);
+    color: white;
     font-weight: 600;
-    font-size: 1rem;
-    box-shadow: 0 2px 8px rgba(67,198,172,0.12);
-    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  }
-  .custom-link:hover {
-    background: #FFC107;
-    color: #f8ffae;
-    box-shadow: 0 4px 16px rgba(52,58,64,0.18);
+    border-radius: 50px;
     text-decoration: none;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.1);
   }
+
+  .custom-btn:hover {
+    background: #8F9E86; /* darker shade of var(--color2) */
+    transform: translateY(-3px);
+  }
+
   .or-text {
-    align-self: center;
+    margin: 0 10px;
     font-weight: 500;
-    color: #343a40;
+    color: var(--color3);
   }
 </style>
 
-<div class="center-container">
+<div class="hero-section">
   <div class="custom-card">
-    <div class="card-body">
-      <h5 class="card-title text-center">Tax Calculation</h5>
-      <h6 class="card-subtitle text-center">New User?</h6>
-      <div class="action-links">
-        <a href="{% url 'register' %}" class="custom-link">Register</a>
-        <span class="or-text">OR</span>
-        <a href="{% url 'login' %}" class="custom-link">Login</a>
-      </div>
+    <h5 class="card-title mb-3">Tax Calculation</h5>
+    <p class="text-muted mb-4" style="color: var(--color1) !important;">Easily calculate and manage your taxes</p>
+    <div class="d-flex justify-content-center align-items-center">
+      <a href="{% url 'register' %}" class="custom-btn">Register</a>
+      <span class="or-text">OR</span>
+      <a href="{% url 'login' %}" class="custom-btn">Login</a>
     </div>
   </div>
 </div>

@@ -17,5 +17,9 @@ urlpatterns = [
     path('hr_dashboard/', views.hr_dashboard, name='hr_dashboard'), 
     path('manager_dashboard/', views.manager_dashboard, name='manager_dashboard'),
     path('approve_tax/<int:employee_id>/', views.approve_tax, name='approve_tax'),
+    path('employee/<int:pk>/report/', views.employee_report, name='employee_report'),
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] 
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import JSONField
+import os 
 
 
 class Profile(models.Model):
@@ -15,46 +16,49 @@ class Profile(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.role}"
     
+def employee_directory_path(instance, filename):
+    # File will be uploaded to MEDIA_ROOT/employee_documents/<username>/<filename>
+    return f'employee_documents/{instance.user.username}/{filename}'
 
 class EmployeeDocument(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='employee_documents')
 
     # Allowance documents
-    Conveyance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    LeaveTA_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Children_Education_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Business_Communication_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Attire_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Petrol_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Furniture_Allowance_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Food_Coupons_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Medical_Reimbursement_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Conveyance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    LeaveTA_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Children_Education_Allowance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Business_Communication_Allowance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Attire_Allowance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Petrol_Allowance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Furniture_Allowance_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Food_Coupons_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Medical_Reimbursement_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
 
     # Deductions documents
-    Section80cUtilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80ccc_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80cccd_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80cccd1b_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80cccd2_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80d_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80d_normal_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80d_severe_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80ddb_other_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section80ddb_seniorcitizen_Utilized_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80e_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80ee_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80eea_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80eeb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80G_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80GGA_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80GGB_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80GGC_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80rrb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80qqb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80tta_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80ttb_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80u_Normal_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
-    Section_80u_severe_Doc = models.FileField(upload_to='employee_documents/', null=True, blank=True)
+    Section80cUtilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80ccc_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80cccd_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80cccd1b_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80cccd2_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80d_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80d_normal_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80d_severe_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80ddb_other_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section80ddb_seniorcitizen_Utilized_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80e_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80ee_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80eea_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80eeb_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80G_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80GGA_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80GGB_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80GGC_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80rrb_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80qqb_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80tta_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80ttb_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80u_Normal_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
+    Section_80u_severe_Doc = models.FileField(upload_to=employee_directory_path, null=True, blank=True)
 
     uploaded_at = models.DateTimeField(auto_now=True)
 
