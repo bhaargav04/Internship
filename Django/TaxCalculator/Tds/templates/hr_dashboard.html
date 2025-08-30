@@ -74,13 +74,13 @@
                         <div class="col-md-6 mb-4">
                             <h5 class="mb-3" style="color: var(--color2);">Uploaded Documents</h5>
                             {% if data.documents %}
-                            {% for filename, url in data.documents.items %}
-                            <div class="mb-3 p-3"
-                                style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                <h6 style="color: var(--color2);">{{ filename }}</h6>
-                                <a href="{{ url }}" target="_blank" class="btn btn-primary btn-sm"> View Document </a>
-                            </div>
-                            {% endfor %}
+                            {% for filename, doc in data.documents.items %}
+<div class="mb-3 p-3"
+    style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+    <h6 style="color: var(--color2);">{{ doc.name }}</h6>
+    <a href="{{ doc.url }}" target="_blank" class="btn btn-primary btn-sm">View Document</a>
+</div>
+{% endfor %}
                             {% else %}
                             <p>No documents uploaded.</p>
                             {% endif %}
