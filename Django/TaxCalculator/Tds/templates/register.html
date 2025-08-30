@@ -106,7 +106,7 @@
           <div class="{% if field.name == 'password1' or field.name == 'password2' %}password-wrapper{% endif %}">
             {{ field|add_class:"form-control form-control-custom" }}
             {% if field.name == 'password1' or field.name == 'password2' %}
-              <i class="bi bi-eye-slash toggle-password"></i>
+              <i class="bi bi-eye-slash toggle-password" style="font-weight: bolder;"></i>
             {% endif %}
           </div>
         </div>
@@ -122,15 +122,15 @@
 <script>
   document.querySelectorAll('.toggle-password').forEach(icon => {
     icon.addEventListener('click', function () {
-      const passwordInput = this.previousElementSibling;
+      const wrapper = this.closest('.password-wrapper'); 
+      const passwordInput = wrapper.querySelector('input'); // Explicitly select input
+      
       if (passwordInput.type === 'password') {
         passwordInput.type = 'text';
-        this.classList.remove('bi-eye-slash');
-        this.classList.add('bi-eye');
+        this.classList.replace('bi-eye-slash', 'bi-eye');
       } else {
         passwordInput.type = 'password';
-        this.classList.remove('bi-eye');
-        this.classList.add('bi-eye-slash');
+        this.classList.replace('bi-eye', 'bi-eye-slash');
       }
     });
   });
