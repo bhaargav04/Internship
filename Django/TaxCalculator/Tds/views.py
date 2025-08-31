@@ -84,11 +84,11 @@ def logout_user(request):
 
 @login_required
 def manager_dashboard(request):
-    submissions = EmployeeTaxData.objects.select_related('user').all()
+    # Order by newest first
+    submissions = EmployeeTaxData.objects.select_related('user').order_by('-created_at')
     employee_data = []
 
     for submission in submissions:
-        # Get documents for this employee
         try:
             documents_obj = submission.user.employee_documents
         except EmployeeDocument.DoesNotExist:
@@ -100,9 +100,11 @@ def manager_dashboard(request):
                 if field.name.endswith("_Doc"):
                     file_obj = getattr(documents_obj, field.name)
                     if file_obj:
-                        documents[field.name] = file_obj
+                        documents[field.name] = {
+                            "url": file_obj.url,
+                            "name": file_obj.name.split('/')[-1]
+                        }
 
-        # Collect utilized fields
         utilized_fields = {}
         for field in EmployeeTaxData._meta.get_fields():
             if field.name.endswith('_Utilized') or field.name in [
@@ -121,6 +123,7 @@ def manager_dashboard(request):
         })
 
     return render(request, 'manager_dashboard.html', {'employee_data': employee_data})
+
 
 @login_required
 def hr_dashboard(request):

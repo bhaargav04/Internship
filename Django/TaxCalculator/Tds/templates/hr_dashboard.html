@@ -81,7 +81,7 @@
                             {% if data.documents %}
                             {% for filename, doc in data.documents.items %}
                             <div class="mb-3 p-3" style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-                                <h6 style="color: var(--color2);">{{ doc.name }}</h6>
+                                <h6 style="color: var(--color2);">{{ filename }}</h6>
                                 <button type="button" 
                                         class="btn btn-primary btn-sm preview-btn"
                                         data-doc-url="{{ doc.url }}"
