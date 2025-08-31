@@ -1,35 +1,74 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container py-4">
-    <h2 class="text-center mb-4" style="color: var(--color2); font-weight: 800;">
-        Tax Report for {{ employee.user.username }}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="fw-bold" style="color: var(--color2); margin-left: 30%;">
+      Tax Report for {{ employee.user.username }}
     </h2>
+    <a href="{% url 'hr_dashboard' %}" class="btn btn-sm btn-outline-danger">
+      Back to Dashboard
+    </a>
+  </div>
 
-   <!-- Replace the Stacked Bar Chart Card -->
-<div class="card shadow-sm p-4 mb-4" style="max-width: 900px; margin: auto;">
-    <h5 class="mb-3 text-center">Category-wise Utilization Pulse</h5>
-    <canvas id="pulseChart" style="height: 350px;"></canvas>
-</div>
-
-
-    <!-- Doughnut and Radar Charts Side by Side -->
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card shadow-sm p-4 mb-4">
-                <h5 class="mb-3 text-center">Overall Utilization</h5>
-                <canvas id="doughnutChart" style="height: 300px;"></canvas>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm p-4 mb-4">
-                <h5 class="mb-3 text-center">Utilization Radar</h5>
-                <canvas id="radarChart" style="height: 300px; max-height: 400px;"></canvas>
-            </div>
-        </div>
+  <!-- 🔥 Employee Tax Summary -->
+  <div class="card shadow-lg border-0 rounded-4 p-4 mb-4" style="max-width: 1000px; margin: auto;">
+    <h5 class="fw-semibold mb-3 text-center">Employee Financial Summary</h5>
+    <div class="row text-center">
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Basic Salary</h6>
+        <h5 class="fw-bold text-primary">₹{{ employee.BasicSalary }}</h5>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Gross Salary</h6>
+        <h5 class="fw-bold text-success">₹{{ employee.Salary }}</h5>
+      </div>
+      <!-- <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Dearness Allowance</h6>
+        <h5 class="fw-bold text-info">₹{{ employee.DearnessAllowance }}</h5>
+      </div> -->
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Total Utilized</h6>
+        <h5 class="fw-bold text-info">₹{{ total_utilized }}</h5>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Total Remaining</h6>
+        <h5 class="fw-bold text-warning">₹{{ total_remaining }}</h5>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Savings (Old Regime)</h6>
+        <h5 class="fw-bold text-success">₹{{ employee.tax_old }}</h5>
+      </div>
+      <div class="col-md-4 mb-3">
+        <h6 class="text-muted">Savings (New Regime)</h6>
+        <h5 class="fw-bold text-success">₹{{ employee.tax_new }}</h5>
+      </div>
     </div>
+  </div>
+
+  <!-- 📈 Area Chart -->
+  <div class="card shadow-lg border-0 rounded-4 p-4 mb-4" style="max-width: 950px; margin: auto;">
+    <h5 class="text-center fw-semibold mb-3">Category-Wise Utilization Trend</h5>
+    <canvas id="areaChart" style="height: 400px;"></canvas>
+  </div>
+
+  <!-- 🍩 Doughnut + 📊 Grouped Bar -->
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-4 p-4 mb-4">
+        <h5 class="text-center fw-semibold mb-3">Overall Utilization</h5>
+        <canvas id="doughnutChart" style="height: 350px;"></canvas>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-4 p-4 mb-4">
+        <h5 class="text-center fw-semibold mb-3">Utilization Comparison</h5>
+        <canvas id="barChart" style="height: 350px;"></canvas>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- Pass data to JS safely -->
+<!-- DATA -->
 {{ labels|json_script:"labels-data" }}
 {{ utilized|json_script:"utilized-data" }}
 {{ remaining|json_script:"remaining-data" }}
@@ -40,89 +79,91 @@
 <script>
 const labels = JSON.parse(document.getElementById('labels-data').textContent);
 const utilized = JSON.parse(document.getElementById('utilized-data').textContent);
-const remaining = JSON.parse(document.getElementById('remaining-data').textContent);
-const totalUtilized = JSON.parse(document.getElementById('total-utilized-data').textContent);
-const totalRemaining = JSON.parse(document.getElementById('total-remaining-data').textContent);
+let remaining = JSON.parse(document.getElementById('remaining-data').textContent);
+let totalUtilized = JSON.parse(document.getElementById('total-utilized-data').textContent);
+let totalRemaining = JSON.parse(document.getElementById('total-remaining-data').textContent);
 
-const pulseCtx = document.getElementById('pulseChart').getContext('2d');
-new Chart(pulseCtx, {
-    type: 'line',
-    data: {
-        labels: labels,
-        datasets: [{
-            label: 'Utilized vs Remaining',
-            data: utilized, // you can combine or choose another metric for the pulse effect
-            fill: true,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 2,
-            tension: 0.4, // smooth line; set 0 for sharp spikes like trading charts
-            pointRadius: 0 // hides the points for a cleaner pulse look
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: { legend: { display: false } },
-        scales: {
-            x: {
-                grid: { display: false }
-            },
-            y: {
-                beginAtZero: true,
-                grid: { drawBorder: false }
-            }
-        },
-        elements: {
-            line: {
-                borderJoinStyle: 'round'
-            }
-        }
+// 🔥 Recalculate Remaining (No Negatives)
+remaining = utilized.map((val, i) => Math.max(0, remaining[i]));
+totalRemaining = Math.max(0, totalRemaining);
+
+// === Area Chart ===
+const ctxArea = document.getElementById('areaChart').getContext('2d');
+const gradient = ctxArea.createLinearGradient(0, 0, 0, 400);
+gradient.addColorStop(0, 'rgba(54,162,235,0.4)');
+gradient.addColorStop(1, 'rgba(54,162,235,0)');
+
+new Chart(ctxArea, {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Utilization Trend',
+      data: utilized,
+      fill: true,
+      backgroundColor: gradient,
+      borderColor: 'rgba(54,162,235,1)',
+      borderWidth: 2,
+      tension: 0.3,
+      pointRadius: 4,
+      pointBackgroundColor: 'rgba(54,162,235,1)'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }
     }
+  }
 });
 
-// --- Doughnut Chart ---
-const doughnutCtx = document.getElementById('doughnutChart').getContext('2d');
-new Chart(doughnutCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Total Utilized', 'Total Remaining'],
-        datasets: [{
-            data: [totalUtilized, totalRemaining],
-            backgroundColor: ['rgba(54, 162, 235, 0.7)', 'rgba(255, 206, 86, 0.7)'],
-            borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: { legend: { position: 'top' } }
-    }
+// === Doughnut Chart ===
+new Chart(document.getElementById('doughnutChart').getContext('2d'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Total Utilized', 'Total Remaining'],
+    datasets: [{
+      data: [totalUtilized, totalRemaining],
+      backgroundColor: ['rgba(54,162,235,0.7)', 'rgba(255,206,86,0.7)'],
+      borderColor: ['rgba(54,162,235,1)', 'rgba(255,206,86,1)'],
+      borderWidth: 1
+    }]
+  },
+  options: { plugins: { legend: { position: 'bottom' } } }
 });
 
-// --- Radar Chart ---
-const radarCtx = document.getElementById('radarChart').getContext('2d');
-new Chart(radarCtx, {
-    type: 'radar',
-    data: {
-        labels: labels,
-        datasets: [
-            {
-                label: 'Utilized',
-                data: utilized,
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 2
-            },
-            {
-                label: 'Remaining',
-                data: remaining,
-                backgroundColor: 'rgba(255, 206, 86, 0.2)',
-                borderColor: 'rgba(255, 206, 86, 1)',
-                borderWidth: 2
-            }
-        ]
-    },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } } }
+// === Bar Chart ===
+new Chart(document.getElementById('barChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Utilized',
+        data: utilized,
+        backgroundColor: 'rgba(54,162,235,0.7)',
+        borderColor: 'rgba(54,162,235,1)',
+        borderWidth: 1
+      },
+      {
+        label: 'Remaining',
+        data: remaining,
+        backgroundColor: 'rgba(255,206,86,0.7)',
+        borderColor: 'rgba(255,206,86,1)',
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { grid: { display: false } },
+      y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } }
+    }
+  }
 });
 </script>
 {% endblock %}

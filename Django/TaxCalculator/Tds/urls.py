@@ -4,6 +4,7 @@ from django.urls import path
 from. import views
 from django.conf import settings
 from django.conf.urls.static import static
+from .views import preview_document
 
 urlpatterns = [
      path('admin/', admin.site.urls),
@@ -18,6 +19,7 @@ urlpatterns = [
     path('manager_dashboard/', views.manager_dashboard, name='manager_dashboard'),
     path('approve_tax/<int:employee_id>/', views.approve_tax, name='approve_tax'),
     path('employee/<int:pk>/report/', views.employee_report, name='employee_report'),
+    path('preview/<int:employee_id>/<path:filename>/', preview_document, name='preview_document'),
     
 ] 
 

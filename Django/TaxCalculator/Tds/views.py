@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from django.http import JsonResponse
+from django.http import JsonResponse, FileResponse, Http404
 import json
 from django.contrib.auth.decorators import login_required
 from rest_framework.parsers import JSONParser
@@ -13,6 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
 import os
 from django.conf import settings
+import mimetypes
+from django.views.decorators.clickjacking import xframe_options_sameorigin
 
 
 
@@ -229,16 +231,20 @@ def employee_report(request, pk):
             val = getattr(employee, field.name, 0) or 0
             if not isinstance(val, Decimal):
                 val = Decimal(val)
-            utilized.append(float(val))
+            utilized_val = float(val)
 
             max_field = field.name.replace("_Utilized", "_Max")
             max_val = getattr(employee, max_field, 0) or 0
             if not isinstance(max_val, Decimal):
                 max_val = Decimal(max_val)
+            max_val = float(max_val)
 
-            rem = max_val - val
-            remaining.append(float(rem))
-            percent_utilized.append(float((val / max_val) * 100) if max_val > 0 else 0)
+            # ✅ Ensure remaining is never negative
+            rem = max(0, max_val - utilized_val)
+
+            utilized.append(utilized_val)
+            remaining.append(rem)
+            percent_utilized.append((utilized_val / max_val * 100) if max_val > 0 else 0)
 
     # Zip data into a list of dictionaries for easy template iteration
     progress_data = [
@@ -259,6 +265,21 @@ def employee_report(request, pk):
         "total_remaining": total_remaining,
     }
     return render(request, "employee_report.html", context)
+
+@xframe_options_sameorigin  # allow embedding from your own site
+def preview_document(request, employee_id, filename):
+    # TODO: validate permissions for employee_id & filename
+    # TODO: find the actual storage path for this user's file
+    path = find_file_path(employee_id, filename)  # implement this
+    try:
+        f = open(path, 'rb')
+    except OSError:
+        raise Http404("File not found")
+
+    content_type = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+    resp = FileResponse(f, content_type=content_type)
+    resp['Content-Disposition'] = f'inline; filename="{filename}"'
+    return resp
 
 ###########################################################################
 
