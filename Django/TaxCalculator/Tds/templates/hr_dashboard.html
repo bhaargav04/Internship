@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <head>
     <style>
         .accordion-item {
-  border-radius: 12px !important;
-  margin-bottom: 10px; /* adds spacing between items */
-  overflow: hidden; /* ensures child elements don't bleed outside */
-}
-
+            border-radius: 12px !important;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+        #pdf-canvas {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
     </style>
+    <!-- PDF.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
+
 <div class="container py-5">
     <h2 class="text-center mb-4" style="color: var(--color2); font-weight: 800;">HR Tax Approval Dashboard</h2>
 
@@ -63,7 +69,6 @@
                                         {% else %}
                                         <span class="badge bg-success">Approved</span>
                                         {% endif %}
-                                        <!-- Report Button -->
                                         <a href="{% url 'employee_report' data.employee.id %}" class="btn btn-info">Report</a>
                                     </div>
                                 </div>
@@ -75,12 +80,16 @@
                             <h5 class="mb-3" style="color: var(--color2);">Uploaded Documents</h5>
                             {% if data.documents %}
                             {% for filename, doc in data.documents.items %}
-<div class="mb-3 p-3"
-    style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-    <h6 style="color: var(--color2);">{{ doc.name }}</h6>
-    <a href="{{ doc.url }}" target="_blank" class="btn btn-primary btn-sm">View Document</a>
-</div>
-{% endfor %}
+                            <div class="mb-3 p-3" style="background: #fff; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                                <h6 style="color: var(--color2);">{{ doc.name }}</h6>
+                                <button type="button" 
+                                        class="btn btn-primary btn-sm preview-btn"
+                                        data-doc-url="{{ doc.url }}"
+                                        data-doc-name="{{ doc.name }}">
+                                    Preview Document
+                                </button>
+                            </div>
+                            {% endfor %}
                             {% else %}
                             <p>No documents uploaded.</p>
                             {% endif %}
@@ -106,7 +115,9 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center" id="documentPreviewBody"
-                style="background: var(--color4); min-height: 500px;"></div>
+                style="background: var(--color4); min-height: 500px;">
+                <canvas id="pdf-canvas"></canvas>
+            </div>
             <div class="modal-footer" style="background: var(--color4);">
                 <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close Preview</button>
             </div>
@@ -119,23 +130,21 @@
         const modal = new bootstrap.Modal(document.getElementById('documentPreviewModal'));
         const previewBody = document.getElementById('documentPreviewBody');
         const previewTitle = document.getElementById('documentPreviewTitle');
+        const pdfCanvas = document.getElementById('pdf-canvas');
+        const ctx = pdfCanvas.getContext('2d');
 
         document.querySelectorAll('.preview-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
+            btn.addEventListener('click', async function () {
                 const url = this.dataset.docUrl;
                 const filename = this.dataset.docName;
-                previewTitle.textContent = filename;
-
-                previewBody.innerHTML = '';
                 const ext = filename.split('.').pop().toLowerCase();
 
+                previewTitle.textContent = filename;
+                previewBody.innerHTML = '';
+                
                 if (ext === 'pdf') {
-                    const embed = document.createElement('embed');
-                    embed.src = url;
-                    embed.type = 'application/pdf';
-                    embed.width = '100%';
-                    embed.height = '600px';
-                    previewBody.appendChild(embed);
+                    previewBody.appendChild(pdfCanvas);
+                    await renderPDF(url);
                 } else if (['jpg', 'jpeg', 'png'].includes(ext)) {
                     const img = document.createElement('img');
                     img.src = url;
@@ -150,6 +159,22 @@
                 modal.show();
             });
         });
+
+        async function renderPDF(url) {
+            const loadingTask = pdfjsLib.getDocument(url);
+            const pdf = await loadingTask.promise;
+            const page = await pdf.getPage(1);
+            const viewport = page.getViewport({ scale: 1.5 });
+
+            pdfCanvas.height = viewport.height;
+            pdfCanvas.width = viewport.width;
+
+            const renderContext = {
+                canvasContext: ctx,
+                viewport: viewport
+            };
+            await page.render(renderContext).promise;
+        }
     });
 </script>
 {% endblock %}
