@@ -15,7 +15,7 @@ import os
 from django.conf import settings
 import mimetypes
 from django.views.decorators.clickjacking import xframe_options_sameorigin
-
+from django.db.models import FileField, ImageField
 
 
 
@@ -124,22 +124,35 @@ def manager_dashboard(request):
 
     return render(request, 'manager_dashboard.html', {'employee_data': employee_data})
 
-
 @login_required
 def hr_dashboard(request):
-    submissions = EmployeeTaxData.objects.select_related('user').order_by('-created_at')  # newest first
-    employee_data = []
+    users_processed = set()
+    grouped_data = []
+
+    # Fetch submissions descending
+    submissions = EmployeeTaxData.objects.select_related('user').order_by('-created_at')
 
     for submission in submissions:
+        user = submission.user
+        username = user.username
+
+        if username in users_processed:
+            continue
+        users_processed.add(username)
+
+        # Use the same `submission` object (already the latest due to -created_at)
+        latest_tax = submission
+
+        # Fetch documents
         try:
-            documents_obj = submission.user.employee_documents
+            documents_obj = user.employee_documents
         except EmployeeDocument.DoesNotExist:
             documents_obj = None
 
         documents_dict = {}
         if documents_obj:
             for field in EmployeeDocument._meta.get_fields():
-                if field.name.endswith("_Doc"):
+                if isinstance(field, (FileField, ImageField)):
                     file_obj = getattr(documents_obj, field.name)
                     if file_obj:
                         documents_dict[field.name] = {
@@ -147,64 +160,73 @@ def hr_dashboard(request):
                             "name": file_obj.name.split('/')[-1]
                         }
 
+        # Fetch utilized tax fields
         utilized_fields = {}
         for field in EmployeeTaxData._meta.get_fields():
             if field.name.endswith('_Utilized') or field.name in [
                 'Salary', 'BasicSalary', 'DearnessAllowance', 'Exempted_HRA_amount', 'Section80cUtilized'
             ]:
-                value = getattr(submission, field.name, None)
+                value = getattr(latest_tax, field.name, None)
                 if value is not None:
                     utilized_fields[field.verbose_name if hasattr(field, 'verbose_name') else field.name] = value
 
-        employee_data.append({
-            'employee': submission,
+        grouped_data.append({
+            'employee': latest_tax,
             'utilized_fields': utilized_fields,
             'documents': documents_dict
         })
 
-    return render(request, 'hr_dashboard.html', {'employee_data': employee_data})
+    return render(request, 'hr_dashboard.html', {'employee_data': grouped_data})    
 
 
 @login_required
 def employee_dashboard(request):
-    tax_old = tax_new = None
+    user = request.user
     success = False
 
+    # Get the latest tax record for this user, or create a new one
+    tax_instance = EmployeeTaxData.objects.filter(user=user).order_by('-created_at').first()
+    if not tax_instance:
+        tax_instance = EmployeeTaxData(user=user)
+        tax_instance.save()
+
+    # Similarly, get or create the document object
+    documents, _ = EmployeeDocument.objects.get_or_create(user=user)
+
     if request.method == "POST":
-        form = EmployeeTaxDataForm(request.POST, request.FILES)
-
+        form = EmployeeTaxDataForm(request.POST, request.FILES, instance=tax_instance)
         if form.is_valid():
-            # 🔹 Save employee tax data
             tax_data = form.save(commit=False)
-            tax_data.user = request.user
-
-            # 🔹 Example tax calculation (replace with your real logic)
-            tax_old = 5000
-            tax_new = 3000
-            tax_data.tax_old = tax_old
-            tax_data.tax_new = tax_new
+            tax_data.user = user
+            # Example tax calculation
+            tax_data.tax_old = 5000
+            tax_data.tax_new = 3000
             tax_data.save()
 
-            # 🔹 Get or create EmployeeDocument for this user
-            documents, created = EmployeeDocument.objects.get_or_create(user=request.user)
-
-            # 🔹 Loop over all uploaded files and assign them to corresponding fields
+            # Save uploaded documents
             for field_name, uploaded_file in request.FILES.items():
                 if uploaded_file and field_name.endswith("_Doc"):
                     setattr(documents, field_name, uploaded_file)
-
             documents.save()
 
             success = True
-            form = EmployeeTaxDataForm()  # Reset form after saving
+            # Rebind form with updated data
+            form = EmployeeTaxDataForm(instance=tax_data)
     else:
-        form = EmployeeTaxDataForm()
+        form = EmployeeTaxDataForm(instance=tax_instance)
+
+    documents_dict = {
+        field.name: getattr(documents, field.name)
+        for field in EmployeeDocument._meta.get_fields()
+        if isinstance(field, (FileField, ImageField))
+    }
 
     return render(request, "employee_dashboard.html", {
         "form": form,
-        "tax_old": tax_old,
-        "tax_new": tax_new,
-        "success": success
+        "tax_old": tax_instance.tax_old,
+        "tax_new": tax_instance.tax_new,
+        "success": success,
+        "documents": documents_dict,
     })
 
 

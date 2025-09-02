@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 {% load widget_tweaks %}
+{% load customfilters %}
 
 <style>
 /* ===== Global Styling ===== */
@@ -154,27 +155,41 @@ body {
       </div>
     </div>
 
-    <!-- Upload Documents Section -->
-    <div class="card form-card mb-5">
-      <div class="card-header">Upload Supporting Documents</div>
-      <div class="card-body">
-        <div class="row g-4">
-          {% for field in form %}
-            {% if "_Utilized" in field.name %}
-              <div class="col-md-6">
-                <label for="{{ field.name }}_Doc" class="form-label-custom">
-                  Document for {{ field.label }}
-                </label>
-                <input type="file" 
-                       name="{{ field.name }}_Doc" 
-                       id="{{ field.name }}_Doc" 
-                       class="form-control form-control-custom">
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
+   <!-- Upload Documents Section -->
+<div class="card form-card mb-5">
+  <div class="card-header">Upload Supporting Documents</div>
+  <div class="card-body">
+    <div class="row g-4">
+      {% for field in form %}
+        {% if "_Utilized" in field.name %}
+          <div class="col-md-6">
+  <label for="{{ field.name }}_Doc" class="form-label-custom">
+    Document for {{ field.label }}
+  </label>
+
+  <!-- Show existing uploaded document -->
+  {% with doc_field=field.name|add:"_Doc" %}
+    {% with file_field=documents|get_item:doc_field %}
+      {% if file_field %}
+        <p class="mt-2 text-muted">
+          Currently Uploaded:
+          <a href="{{ file_field.url }}" target="_blank">View</a>
+        </p>
+      {% endif %}
+    {% endwith %}
+  {% endwith %}
+
+  <!-- Upload new document -->
+  <input type="file" 
+         name="{{ field.name }}_Doc" 
+         id="{{ field.name }}_Doc" 
+         class="form-control form-control-custom">
+</div>
+        {% endif %}
+      {% endfor %}
     </div>
+  </div>
+</div>
 
     <!-- Submit Button -->
     <div class="text-center mt-5">

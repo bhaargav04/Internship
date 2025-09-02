@@ -12,25 +12,48 @@
             border: 1px solid #ddd;
             border-radius: 8px;
         }
+        /* Search bar styles */
+        .search-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            width: 300px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+        }
     </style>
-    <!-- PDF.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 
 <div class="container py-5">
-    <h2 class="text-center mb-4" style="color: var(--color2); font-weight: 800;">HR Tax Approval Dashboard</h2>
+    <!-- Title and Search Bar -->
+    <div class="mb-4 text-center">
+        <h2 style="color: var(--color2); font-weight: 800;">HR Tax Approval Dashboard</h2>
+       
+    </div>
+      <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search by username...">
+        </div>
 
     {% if employee_data %}
     <div class="accordion" id="employeeAccordion">
         {% for data in employee_data %}
-        <div class="accordion-item mb-3 shadow-sm" style="border-radius: 12px; border:1px solid var(--color3);">
+        <div class="accordion-item mb-3 shadow-sm employee-item" style="border-radius: 12px; border:1px solid var(--color3);">
             <h2 class="accordion-header" id="heading{{ forloop.counter }}">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
                     data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false"
                     aria-controls="collapse{{ forloop.counter }}"
                     style="background: var(--color4); color: var(--color2); font-weight: 600;">
-                    {{ data.employee.user.username }}
-                    <small class="ms-2 text-muted">(Submitted on {{ data.employee.created_at|date:"d M Y H:i" }})</small>
+                    <span class="username">{{ data.employee.user.username }}</span>
+                   <small class="ms-2 text-muted">
+    Submitted: {{ data.employee.created_at|date:"d M Y H:i" }}
+    {% if data.employee.created_at != data.employee.updated_at %}
+        | Updated: {{ data.employee.updated_at|date:"d M Y H:i" }}
+    {% endif %}
+</small>
                 </button>
             </h2>
 
@@ -175,6 +198,18 @@
             };
             await page.render(renderContext).promise;
         }
+
+        // 🔍 Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const employeeItems = document.querySelectorAll('.employee-item');
+
+        searchInput.addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            employeeItems.forEach(item => {
+                const username = item.querySelector('.username').textContent.toLowerCase();
+                item.style.display = username.includes(query) ? '' : 'none';
+            });
+        });
     });
 </script>
 {% endblock %}
