@@ -1,0 +1,33 @@
+{% extends 'CC/base.html' %}
+{% block content %}
+<br/>
+<div id="certificate" style="width: 800px; margin: auto; padding: 60px; border: 8px double #000; font-family: 'Georgia', serif; background-color: #fdfcf7; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+
+    <h1 style="text-align: center; font-size: 2.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+        Employee Joining Policy
+    </h1>
+    <hr style="border: 1px solid #000; width: 70%; margin: auto; margin-bottom: 30px;">
+
+    <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+        This is to certify that <strong>{{ cert.employee_name }}</strong> (Employee ID: <strong>{{ cert.employee_id }}</strong>) 
+        joined our organization on <strong>{{ cert.joining_date|date:"d M Y" }}</strong> as a <strong>{{ cert.designation }}</strong>. 
+        The employment terms are defined in the attached policy document.
+    </p>
+
+    <div style="margin-top: 80px; display: flex; justify-content: space-between; font-size: 1rem;">
+        <div>
+            <p>Date: <strong>{{ cert.approved_date|date:"d M Y" }}</strong></p>
+            <p>Employee Signature:</p>
+            <img src="{{ cert.signature.url }}" width="120" style="margin-top: 10px;">
+        </div>
+        <div style="text-align: right;">
+            <p>HR / Principal Signature:</p>
+            {% if cert.principal_signature %}
+                <img src="{{ cert.principal_signature.url }}" width="120" style="margin-top: 10px;">
+            {% else %}
+                <p style="color: gray; font-style: italic;">(Not signed yet)</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

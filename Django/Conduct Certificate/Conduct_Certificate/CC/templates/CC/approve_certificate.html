@@ -37,11 +37,10 @@
 <!-- Approval Form -->
 <div class="container mt-4" style="max-width: 800px;">
     <h3 class="mt-4">Approve Conduct Certificate</h3>
-    <form method="POST" enctype="multipart/form-data" class="mt-3">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-success">Approve with Signature</button>
-        <a href="{% url 'reject_certificate' cert.id %}" class="btn btn-danger ms-2">Reject</a>
-    </form>
+    <form method="POST" enctype="multipart/form-data" class="mt-3" action="{% url 'approve_certificate' cert.id 'conduct' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Approve with Signature</button>
+</form>
 </div>
 {% endblock %}

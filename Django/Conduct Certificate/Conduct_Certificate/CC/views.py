@@ -1,7 +1,21 @@
 from django.shortcuts import render, redirect , get_object_or_404
 from django.contrib.auth import login, authenticate, logout
-from .forms import SignUpForm, ConductCertificateForm , ApproveCertificateForm
-from .models import Profile, ConductCertificate, ConductRequest
+from .forms import (
+    SignUpForm,
+    ConductCertificateForm,
+    TransferCertificateForm,
+    EmployeeJoiningPolicyForm,
+    RentalAgreementForm,
+    ApproveCertificateForm,
+)
+from .models import (
+    Profile,
+    ConductCertificate,
+    TransferCertificate,
+    EmployeeJoiningPolicy,
+    RentalAgreement,
+    ConductRequest,
+)   
 from django.contrib import messages
 
 
@@ -61,63 +75,112 @@ def student_dashboard(request):
     if request.user.profile.role != 'student':
         return redirect('home')
 
-    my_requests = ConductCertificate.objects.filter(student=request.user)
-    return render(request, 'CC/student_dashboard.html', {
-        'my_requests': my_requests
-    })
+    # Fetch all certificates separately
+    conduct_requests = ConductCertificate.objects.filter(student=request.user)
+    transfer_requests = TransferCertificate.objects.filter(student=request.user)
+    rental_requests = RentalAgreement.objects.filter(student=request.user)
+    employee_requests = EmployeeJoiningPolicy.objects.filter(employee=request.user)  # note: employee field
 
+    return render(request, 'CC/student_dashboard.html', {
+        'conduct_requests': conduct_requests,
+        'transfer_requests': transfer_requests,
+        'rental_requests': rental_requests,
+        'employee_requests': employee_requests,
+    })
     
 
 
 def principal_dashboard(request):
-    
     if request.user.profile.role != 'principal':
         return redirect('home')
 
-    pending_requests = ConductCertificate.objects.filter(status="Pending")
+    pending_conduct = ConductCertificate.objects.filter(status="Pending")
+    pending_transfer = TransferCertificate.objects.filter(status="Pending")
+    pending_rental = RentalAgreement.objects.filter(status="Pending")
+    pending_employee = EmployeeJoiningPolicy.objects.filter(status="Pending")
+
     return render(request, 'CC/principal_dashboard.html', {
-        'pending_requests': pending_requests
+        'pending_conduct': pending_conduct,
+        'pending_transfer': pending_transfer,
+        'pending_rental': pending_rental,
+        'pending_employee': pending_employee,
     })
 
-def approve_certificate(request, cert_id):
-    cert = get_object_or_404(ConductCertificate, id=cert_id)
+def approve_certificate(request, cert_id, cert_type):
+    model_map = {
+        "conduct": ConductCertificate,
+        "transfer": TransferCertificate,
+        "employee": EmployeeJoiningPolicy,
+        "rental": RentalAgreement,
+    }
+
+    ModelClass = model_map.get(cert_type)
+    if not ModelClass:
+        return redirect('principal_dashboard')
+
+    cert = get_object_or_404(ModelClass, id=cert_id)
 
     if request.method == "POST":
         form = ApproveCertificateForm(request.POST, request.FILES, instance=cert)
         if form.is_valid():
             cert.status = "Approved"
+            cert.save()
             form.save()
             return redirect('principal_dashboard')
     else:
         form = ApproveCertificateForm(instance=cert)
 
-    # Load selected template dynamically
-    template_name = f"CC/{cert.template_choice}.html"
-    
-    return render(request, template_name, {"form": form, "cert": cert})
+    return render(request, f"CC/{cert_type}_template.html", {"form": form, "cert": cert})
 
-def reject_certificate(request, cert_id):
-    if request.user.profile.role != 'principal':
-        return redirect('home')
+def reject_certificate(request, cert_id, cert_type):
+    model_map = {
+        "conduct": ConductCertificate,
+        "transfer": TransferCertificate,
+        "employee": EmployeeJoiningPolicy,
+        "rental": RentalAgreement,
+    }
 
-    certificate = get_object_or_404(ConductCertificate, id=cert_id)
-    certificate.status = "Rejected"
-    certificate.save()
+    ModelClass = model_map.get(cert_type)
+    if not ModelClass:
+        return redirect('principal_dashboard')
+
+    cert = get_object_or_404(ModelClass, id=cert_id)
+    cert.status = "Rejected"
+    cert.save()
     return redirect('principal_dashboard')
 
 
 def submit_conduct_certificate(request):
-    if request.method == 'POST':
-        form = ConductCertificateForm(request.POST, request.FILES)
+    selected_template = request.POST.get("template_choice", "template1")
+
+    form_class_map = {
+        "template1": ConductCertificateForm,
+        "template2": TransferCertificateForm,
+        "template3": EmployeeJoiningPolicyForm,
+        "template4": RentalAgreementForm,
+    }
+    FormClass = form_class_map.get(selected_template, ConductCertificateForm)
+
+    if request.method == "POST":
+        form = FormClass(request.POST, request.FILES)
         if form.is_valid():
             certificate = form.save(commit=False)
-            certificate.student = request.user
+            
+            # Assign correct user field
+            if selected_template == "template3":  # EmployeeJoiningPolicy
+                certificate.employee = request.user
+            else:  # all other templates
+                certificate.student = request.user
+
             certificate.save()
             return redirect('student_dashboard')
     else:
-        form = ConductCertificateForm()
-    return render(request, 'CC/conduct_request.html', {'form': form})
+        form = FormClass()
 
+    return render(request, "CC/conduct_request.html", {
+        "form": form,
+        "selected_template": selected_template,
+    })
 
 # @login_required
 def certificate_preview(request, cert_id):

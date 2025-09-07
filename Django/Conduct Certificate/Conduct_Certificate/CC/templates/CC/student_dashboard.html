@@ -1,12 +1,13 @@
 {% extends 'CC/base.html' %}
 {% block content %}
 <br/>
-<h2 class="text-center">My Conduct Requests</h2>
+<h2 class="text-center">My Certificate Requests</h2>
 
 <!-- Button to create a new request -->
-<a href="{% url 'conduct_request' %}" class="btn btn-info mb-2" style="margin-left: 86%;">New Request</a>
+<a href="{% url 'conduct_request' %}" class="btn btn-info mb-3" style="margin-left: 86%;">New Request</a>
 
-<!-- Requests Table --> 
+<!-- ================= Conduct Certificates ================= -->
+<h4>Conduct Certificates</h4>
 <table class="table table-bordered table-striped" style="width: 90%; margin: auto;">
     <thead>
         <tr>
@@ -18,7 +19,7 @@
         </tr>
     </thead>
     <tbody>
-        {% for cert in my_requests %}
+        {% for cert in conduct_requests %}
         <tr>
             <td>{{ cert.academic_year_from }} - {{ cert.academic_year_to }}</td>
             <td>{{ cert.degree }}</td>
@@ -33,27 +34,127 @@
                 {% endif %}
             </td>
             <td>
-     {% if cert.status == "Pending" %}
-        <!-- Preview Button -->
-        <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-primary btn-sm">Preview</a>
-        
-        <!-- Edit Button -->
-        <a href="{% url 'conduct_request_edit' cert.id %}" class="btn btn-warning btn-sm">Edit</a>
-    
-    {% elif cert.status == "Approved" %}
-        <!-- Approved: Only View/Download -->
-        <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-success btn-sm">View & Download</a>
-    
-    {% else %}
-        <!-- Rejected Case -->
-        <span class="badge bg-danger">Rejected</span>
-    {% endif %}
-</td>
-
+                {% if cert.status == "Pending" %}
+                    <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-primary btn-sm">Preview</a>
+                    <a href="{% url 'conduct_request_edit' cert.id %}" class="btn btn-warning btn-sm">Edit</a>
+                {% elif cert.status == "Approved" %}
+                    <a href="{% url 'certificate_preview' cert.id %}" class="btn btn-success btn-sm">View & Download</a>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
         </tr>
-        
         {% empty %}
         <tr><td colspan="5" class="text-center">No requests found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- ================= Transfer Certificates ================= -->
+<h4 class="mt-4">Transfer Certificates</h4>
+<table class="table table-bordered table-striped" style="width: 90%; margin: auto;">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>DOB</th>
+            <th>Admission No</th>
+            <th>Course</th>
+            <th>Date of Leaving</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cert in transfer_requests %}
+        <tr>
+            <td>{{ cert.student_name }}</td>
+            <td>{{ cert.dob }}</td>
+            <td>{{ cert.admission_no }}</td>
+            <td>{{ cert.course }}</td>
+            <td>{{ cert.date_of_leaving }}</td>
+            <td>
+                {% if cert.status == "Pending" %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% elif cert.status == "Approved" %}
+                    <span class="badge bg-success">Approved</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6" class="text-center">No requests found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- ================= Employee Joining Policies ================= -->
+<h4 class="mt-4">Employee Joining Policies</h4>
+<table class="table table-bordered table-striped" style="width: 90%; margin: auto;">
+    <thead>
+        <tr>
+            <th>Employee Name</th>
+            <th>Designation</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cert in employee_requests %}
+        <tr>
+            <td>{{ cert.employee_name }}</td>
+            <td>{{ cert.designation }}</td>
+            <td>{{ cert.joining_date }}</td>
+            <td>
+                {% if cert.status == "Pending" %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% elif cert.status == "Approved" %}
+                    <span class="badge bg-success">Approved</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center">No requests found</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- ================= Rental Agreements ================= -->
+<h4 class="mt-4">Rental Agreements</h4>
+<table class="table table-bordered table-striped" style="width: 90%; margin: auto;">
+    <thead>
+        <tr>
+            <th>Tenant Name</th>
+            <th>Landlord Name</th>
+            <th>Property Address</th>
+            <th>Rent Amount</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for cert in rental_requests %}
+        <tr>
+            <td>{{ cert.tenant_name }}</td>
+            <td>{{ cert.landlord_name }}</td>
+            <td>{{ cert.property_address }}</td>
+            <td>{{ cert.rent_amount }}</td>
+            <td>{{ cert.start_date }}</td>
+            <td>{{ cert.end_date }}</td>
+            <td>
+                {% if cert.status == "Pending" %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                {% elif cert.status == "Approved" %}
+                    <span class="badge bg-success">Approved</span>
+                {% else %}
+                    <span class="badge bg-danger">Rejected</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" class="text-center">No requests found</td></tr>
         {% endfor %}
     </tbody>
 </table>
