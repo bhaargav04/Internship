@@ -12,10 +12,10 @@ urlpatterns = [
     path('principal_dashboard/', views.principal_dashboard, name='principal_dashboard'),
 
     # Approve/Reject with certificate type
-   path('approve-certificate/<int:cert_id>/<str:cert_type>/', views.approve_certificate, name='approve_certificate'),
-path('reject-certificate/<int:cert_id>/<str:cert_type>/', views.reject_certificate, name='reject_certificate'),
+    path('approve-certificate/<int:cert_id>/<str:cert_type>/', views.approve_certificate, name='approve_certificate'),
+    path('reject-certificate/<int:cert_id>/<str:cert_type>/', views.reject_certificate, name='reject_certificate'),
 
     path('conduct_request/', views.submit_conduct_certificate, name='conduct_request'),
-    path('certificate_preview/<int:cert_id>/', views.certificate_preview, name='certificate_preview'),
-    path('certificate/edit/<int:cert_id>/', views.conduct_request_edit, name='conduct_request_edit'),
+    path('certificate/preview/<str:cert_type>/<int:cert_id>/', views.certificate_preview, name='certificate_preview'),
+    path('certificate/edit/<str:cert_type>/<int:cert_id>/', views.certificate_edit, name='certificate_edit'),
 ]

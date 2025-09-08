@@ -3,57 +3,49 @@
 <br/>
 <div id="certificate" style="width: 800px; margin: auto; padding: 60px; border: 8px double #000; font-family: 'Georgia', serif; background-color: #fdfcf7; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
 
-    <!-- Header -->
     <h1 style="text-align: center; font-size: 2.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
         Conduct Certificate
     </h1>
     <hr style="border: 1px solid #000; width: 70%; margin: auto; margin-bottom: 30px;">
 
-    <!-- Certificate Body -->
     <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
         This is to certify that <strong style="font-size: 1.3rem; text-decoration: underline;">{{ cert.name }}</strong> was a bonafide student of 
         <strong>{{ cert.degree }}</strong> in the branch of <strong>{{ cert.branch }}</strong> during the academic year 
         <strong>{{ cert.academic_year_from }}</strong> to <strong>{{ cert.academic_year_to }}</strong>. The student has maintained good conduct and character during their period of study.
     </p>
 
-    <!-- Footer Section -->
     <div style="margin-top: 80px; display: flex; justify-content: space-between; font-size: 1rem;">
         <div>
             <p>Date: <strong>{{ cert.approved_date|date:"d M Y" }}</strong></p>
             <p>Signature:</p>
-            <img src="{{ cert.signature.url }}" alt="Signature" width="120" style="margin-top: 10px;">
+            <img src="{{ cert.signature.url }}" width="120" style="margin-top: 10px;">
         </div>
         <div style="text-align: right;">
-    <p>Principal’s Signature:</p>
-    {% if cert.principal_signature %}
-        <img src="{{ cert.principal_signature.url }}" alt="Principal Signature" width="120" style="margin-top: 10px;">
-    {% else %}
-        <p style="color: gray; font-style: italic;">(Not signed yet)</p>
-    {% endif %}
-</div>
+            <p>Principal’s Signature:</p>
+            {% if cert.principal_signature %}
+                <img src="{{ cert.principal_signature.url }}" width="120" style="margin-top: 10px;">
+            {% else %}
+                <p style="color: gray; font-style: italic;">(Not signed yet)</p>
+            {% endif %}
+        </div>
     </div>
 </div>
 
-<!-- Download Button -->
 <div style="text-align: center; margin-top: 20px;">
     <button id="downloadBtn" class="btn btn-primary">Download PDF</button>
 </div>
 
-
-<br/>
-<!-- html2pdf.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script>
 document.getElementById('downloadBtn').addEventListener('click', function () {
     const element = document.getElementById('certificate');
-    const opt = {
-        margin:       0.5,
-        filename:     'conduct_certificate.pdf',
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 3 },
-        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
-    };
-    html2pdf().set(opt).from(element).save();
+    html2pdf().set({
+        margin: 0.5,
+        filename: 'conduct_certificate.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 3 },
+        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+    }).from(element).save();
 });
 </script>
 {% endblock %}

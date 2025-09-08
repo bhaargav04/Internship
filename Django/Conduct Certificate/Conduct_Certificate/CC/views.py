@@ -183,26 +183,68 @@ def submit_conduct_certificate(request):
     })
 
 # @login_required
-def certificate_preview(request, cert_id):
-    cert = get_object_or_404(ConductCertificate, id=cert_id)
-    
-    # Only allow student owner or principal to view
-    if request.user.profile.role == 'student' and cert.student != request.user:
-        return redirect('home')
+def certificate_preview(request, cert_type, cert_id):
+    model_map = {
+        "conduct": ConductCertificate,
+        "transfer": TransferCertificate,
+        "employee": EmployeeJoiningPolicy,
+        "rental": RentalAgreement,
+    }
 
-    template_name = f"CC/{cert.template_choice}.html"
-    return render(request, template_name, {'cert': cert})
+    template_map = {
+        "conduct": "CC/conduct_certificate_preview.html",
+        "transfer": "CC/transfer_certificate_preview.html",
+        "employee": "CC/employee_certificate_preview.html",
+        "rental": "CC/rental_certificate_preview.html",
+    }
+
+    ModelClass = model_map.get(cert_type)
+    template_name = template_map.get(cert_type)
+
+    if not ModelClass or not template_name:
+        return redirect('student_dashboard')
+
+    cert = get_object_or_404(ModelClass, id=cert_id)
+
+    # Restrict access → only owner student or principal
+    if request.user.profile.role == 'student':
+        owner_field = "student" if cert_type != "employee" else "employee"
+        if getattr(cert, owner_field) != request.user:
+            return redirect('home')
+
+    return render(request, template_name, {"cert": cert})
 
 # @login_required
-def conduct_request_edit(request, cert_id):
-    cert = get_object_or_404(ConductCertificate, id=cert_id, student=request.user, status="Pending")
+def certificate_edit(request, cert_type, cert_id):
+    model_map = {
+        "conduct": (ConductCertificate, ConductCertificateForm),
+        "transfer": (TransferCertificate, TransferCertificateForm),
+        "employee": (EmployeeJoiningPolicy, EmployeeJoiningPolicyForm),
+        "rental": (RentalAgreement, RentalAgreementForm),
+    }
+
+    ModelClass, FormClass = model_map.get(cert_type, (None, None))
+    if not ModelClass:
+        return redirect('student_dashboard')
+
+    cert = get_object_or_404(ModelClass, id=cert_id)
+
+    # Only pending ones can be edited
+    if cert.status != "Pending":
+        return redirect('student_dashboard')
+
+    # Restrict edit to owner
+    if request.user.profile.role == 'student':
+        owner_field = "student" if cert_type != "employee" else "employee"
+        if getattr(cert, owner_field) != request.user:
+            return redirect('home')
 
     if request.method == "POST":
-        form = ConductCertificateForm(request.POST, request.FILES, instance=cert)
+        form = FormClass(request.POST, request.FILES, instance=cert)
         if form.is_valid():
             form.save()
             return redirect('student_dashboard')
     else:
-        form = ConductCertificateForm(instance=cert)
+        form = FormClass(instance=cert)
 
-    return render(request, 'CC/conduct_request.html', {'form': form})
+    return render(request, "CC/conduct_request.html", {"form": form})
