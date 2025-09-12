@@ -1,79 +1,83 @@
+
 {% extends 'CC/base.html' %}
 {% block content %}
+{% load static %}
 <br/>
-<div id="certificate" style="width: 800px; margin: auto; padding: 60px; border: 8px double #000; font-family: 'Georgia', serif; background-color: #fdfcf7; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+<div id="certificate" style="width: 800px; margin: auto; padding: 40px; border: 6px double #000; font-family: 'Georgia', serif; background-color: #fffdf8; box-shadow: 0 0 15px rgba(0,0,0,0.3);">
 
-    <!-- Title -->
-    <h1 style="text-align: center; font-size: 2.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
+    <!-- Stamp Paper Front Look -->
+    <div style="text-align: center; border: 3px solid #000; padding: 20px; margin-bottom: 40px; background: #faf0d0;">
+        <img src="{% static 'images/ashoka_emblem.png' %}" alt="Indian Emblem" width="80" style="margin-bottom: 10px;">
+        <h2 style="font-size: 1.8rem; font-weight: bold; letter-spacing: 2px; text-transform: uppercase;">
+            Government of India
+        </h2>
+        <h1 style="font-size: 2.5rem; margin: 15px 0; color: darkred; text-transform: uppercase;">
+            ₹100 Non-Judicial Stamp Paper
+        </h1>
+        <p style="font-size: 1rem; color: #333;">(Simulated for digital rental agreement purposes)</p>
+    </div>
+
+    <!-- Agreement Title -->
+    <h1 style="text-align: center; font-size: 2rem; font-weight: bold; margin-bottom: 30px; text-transform: uppercase;">
         Rental Agreement
     </h1>
     <hr style="border: 1px solid #000; width: 70%; margin: auto; margin-bottom: 30px;">
 
     <!-- Intro -->
-    <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
-        This Rental Agreement is made and executed on this <strong>{{ cert.start_date|date:"d M Y" }}</strong> 
-        between <strong>{{ cert.landlord_name }}</strong> (hereinafter referred to as the "Landlord") residing at 
-        <strong>{{ cert.landlord_address }}</strong>, and <strong>{{ cert.tenant_name }}</strong> 
-        (hereinafter referred to as the "Tenant") currently residing at <strong>{{ cert.tenant_address }}</strong>.
+    <p style="margin-top: 20px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+        THIS RENTAL AGREEMENT is executed on this <strong>{{ cert.start_date|date:"d M Y" }}</strong> 
+        at <strong>{{ cert.jurisdiction }}</strong>, BETWEEN 
+        <strong>{{ cert.landlord_name }}</strong>, residing at 
+        <strong>{{ cert.landlord_address }}</strong> (hereinafter referred to as the "Landlord"), 
+        AND <strong>{{ cert.tenant_name }}</strong>, residing at 
+        <strong>{{ cert.tenant_address }}</strong> (hereinafter referred to as the "Tenant").
     </p>
 
     <!-- Clause 1 -->
-    <h3 style="margin-top: 30px; text-decoration: underline;">1. Property Details</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        The Landlord hereby agrees to let and the Tenant agrees to take on rent the property located at 
-        <strong>{{ cert.property_address }}</strong> (hereinafter referred to as the "Premises") 
-        for residential purposes only.
-    </p>
+    <h3>1. Property Details</h3>
+    <p>The Tenant agrees to occupy the premises at <strong>{{ cert.property_address }}</strong> solely for residential purposes.</p>
 
     <!-- Clause 2 -->
-    <h3 style="margin-top: 20px; text-decoration: underline;">2. Rent & Security Deposit</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        The Tenant agrees to pay a monthly rent of <strong>{{ cert.rent_amount }}</strong>, payable 
-        on or before the 5th of each month. The Tenant shall also pay a refundable security deposit 
-        of <strong>{{ cert.security_deposit }}</strong>, which shall be returned at the end of this 
-        agreement subject to deductions for any damages or unpaid dues.
+    <h3>2. Rent & Security Deposit</h3>
+    <p>
+        The monthly rent shall be <strong>{{ cert.rent_amount }}</strong>, payable on or before the 5th of each month.
+        A refundable security deposit of <strong>{{ cert.security_deposit }}</strong> is payable, to be refunded at the
+        end of tenancy subject to deductions for damage or dues.
     </p>
 
     <!-- Clause 3 -->
-    <h3 style="margin-top: 20px; text-decoration: underline;">3. Duration</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        This Agreement shall commence on <strong>{{ cert.start_date|date:"d M Y" }}</strong> and shall remain 
-        valid until <strong>{{ cert.end_date|date:"d M Y" }}</strong>, unless terminated earlier by either party 
-        by giving one month's written notice.
+    <h3>3. Duration</h3>
+    <p>
+        The Agreement shall remain in effect from <strong>{{ cert.start_date|date:"d M Y" }}</strong>
+        until <strong>{{ cert.end_date|date:"d M Y" }}</strong>, unless terminated earlier.
     </p>
 
-    <!-- Clause 4 -->
-    <h3 style="margin-top: 20px; text-decoration: underline;">4. Maintenance & Utilities</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        The Tenant shall maintain the Premises in good condition and shall bear charges for electricity, 
-        water, and other utilities. Any major repairs to the structure of the building shall be borne 
-        by the Landlord.
-    </p>
-
-    <!-- Force page break -->
     <div style="page-break-before: always;"></div>
 
-    <!-- Page 2 Clauses -->
-    <h3 style="margin-top: 20px; text-decoration: underline;">5. Restrictions</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        The Tenant shall not sublet, assign, or transfer the Premises or any part thereof without 
-        prior written consent of the Landlord. The Tenant shall not use the Premises for any unlawful 
-        activities.
-    </p>
+    <!-- Page 2 -->
+    <h3>4. Maintenance & Utilities</h3>
+    <p>The Tenant shall maintain the premises in good condition, bearing costs for utilities. Structural repairs shall be borne by the Landlord.</p>
 
-    <h3 style="margin-top: 20px; text-decoration: underline;">6. Termination</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        Either party may terminate this Agreement by serving one month's written notice. 
-        Upon termination, the Tenant shall vacate the Premises and hand over peaceful possession 
-        to the Landlord in the same condition as received, subject to normal wear and tear.
-    </p>
+    <h3>5. Restrictions</h3>
+    <p>No subletting or unlawful activities are permitted on the premises without the Landlord's consent.</p>
 
-    <h3 style="margin-top: 20px; text-decoration: underline;">7. Dispute Resolution</h3>
-    <p style="font-size: 1.1rem; line-height: 1.8; text-align: justify;">
-        In case of any disputes arising under this Agreement, both parties shall attempt to resolve 
-        the matter amicably. If unresolved, the disputes shall be subject to the jurisdiction of the 
-        courts at <strong>{{ cert.jurisdiction }}</strong>.
-    </p>
+    <h3>6. Termination</h3>
+    <p>Either party may terminate by giving one month’s written notice. The Tenant shall vacate peacefully upon termination.</p>
+
+    <h3>7. Dispute Resolution</h3>
+    <p>Disputes shall be resolved amicably, failing which jurisdiction shall rest with the courts of <strong>{{ cert.jurisdiction }}</strong>.</p>
+
+    <div style="page-break-before: always;"></div>
+
+    <!-- Page 3 Extra Clauses -->
+    <h3>8. Indemnity</h3>
+    <p>The Tenant agrees to indemnify the Landlord against any legal or third-party claims arising from misuse of the premises.</p>
+
+    <h3>9. Notices</h3>
+    <p>All notices shall be in writing and delivered to the addresses mentioned above by registered post or email.</p>
+
+    <h3>10. Governing Law</h3>
+    <p>This Agreement shall be governed by and construed in accordance with the laws of India.</p>
 
     <!-- Signatures -->
     <div style="margin-top: 100px; display: flex; justify-content: space-between; font-size: 1rem;">
@@ -95,8 +99,14 @@
         </div>
     </div>
 
-    <p style="margin-top: 60px; font-size: 0.9rem; text-align: center; color: gray;">
-        This is a system-generated rental agreement and does not require physical stamping or notarization.
+    <!-- Witness -->
+    <div style="margin-top: 80px;">
+        <p><strong>Witness 1:</strong> _________________________</p>
+        <p><strong>Witness 2:</strong> _________________________</p>
+    </div>
+
+    <p style="margin-top: 40px; font-size: 0.9rem; text-align: center; color: gray;">
+        This is a digitally generated rental agreement and not a substitute for legally stamped registration unless executed with government-authorized e-stamping.
     </p>
 </div>
 {% endblock %}

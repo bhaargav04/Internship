@@ -7,16 +7,26 @@ from .models import ConductCertificate, TransferCertificate, EmployeeJoiningPoli
 
 # ---------------- Sign Up Form ----------------
 class SignUpForm(UserCreationForm):
-    first_name = forms.CharField(label="", max_length=40,
-                                 widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}))
-    last_name = forms.CharField(label="", max_length=40,
-                                widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}))
-    email = forms.EmailField(label="", widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'}))
-    role = forms.ChoiceField(choices=Profile.ROLE_CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+    first_name = forms.CharField(
+        label="", max_length=40,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'})
+    )
+    last_name = forms.CharField(
+        label="", max_length=40,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'})
+    )
+    email = forms.EmailField(
+        label="",
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Email Address'})
+    )
+    role = forms.ChoiceField(
+        choices=Profile.ROLE_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2', 'role')
+        fields = ('username', 'first_name', 'last_name', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super(SignUpForm, self).__init__(*args, **kwargs)
@@ -36,6 +46,19 @@ class SignUpForm(UserCreationForm):
         self.fields['password2'].label = ''
         self.fields['password2'].help_text = '<span class="form-text text-muted"><small>Re-enter password for verification.</small></span>'
 
+    def save(self, commit=True):
+        """Override save to create Profile with role"""
+        user = super().save(commit=False)
+        user.email = self.cleaned_data['email']
+
+        if commit:
+            user.save()
+            # Create Profile with selected role
+            Profile.objects.create(
+                user=user,
+                role=self.cleaned_data['role']
+            )
+        return user
 
 # ---------------- Conduct Certificate ----------------
 class ConductCertificateForm(forms.ModelForm):
@@ -83,5 +106,44 @@ class RentalAgreementForm(forms.ModelForm):
 # ---------------- Approve Certificate ----------------
 class ApproveCertificateForm(forms.ModelForm):
     class Meta:
+        model = None  # will be set dynamically
+        fields = []   # set in __init__
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get("instance")
+        super().__init__(*args, **kwargs)
+
+        if isinstance(instance, ConductCertificate) or isinstance(instance, TransferCertificate):
+            self._meta.model = instance.__class__
+            self._meta.fields = ["principal_signature"]
+
+        elif isinstance(instance, EmployeeJoiningPolicy):
+            self._meta.model = EmployeeJoiningPolicy
+            self._meta.fields = ["hr_signature"]
+
+        elif isinstance(instance, RentalAgreement):
+            self._meta.model = RentalAgreement
+            self._meta.fields = ["landlord_signature"]
+
+class ApproveConductCertificateForm(forms.ModelForm):
+    class Meta:
         model = ConductCertificate
-        fields = ['principal_signature']
+        fields = ["principal_signature"]
+
+
+class ApproveTransferCertificateForm(forms.ModelForm):
+    class Meta:
+        model = TransferCertificate
+        fields = ["principal_signature"]
+
+
+class ApproveEmployeePolicyForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeJoiningPolicy
+        fields = ["hr_signature"]
+
+
+class ApproveRentalAgreementForm(forms.ModelForm):
+    class Meta:
+        model = RentalAgreement
+        fields = ["landlord_signature"]

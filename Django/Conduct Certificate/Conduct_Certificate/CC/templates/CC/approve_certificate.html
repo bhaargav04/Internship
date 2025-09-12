@@ -5,28 +5,59 @@
 
     <!-- Header -->
     <h1 style="text-align: center; font-size: 2.2rem; font-weight: bold; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;">
-        Conduct Certificate
+        {{ cert_type|title }} Certificate
     </h1>
     <hr style="border: 1px solid #000; width: 70%; margin: auto; margin-bottom: 30px;">
 
     <!-- Certificate Body -->
-    <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
-        This is to certify that <strong style="font-size: 1.3rem; text-decoration: underline;">{{ cert.name }}</strong> was a bonafide student of 
-        <strong>{{ cert.degree }}</strong> in the branch of <strong>{{ cert.branch }}</strong> during the academic year 
-        <strong>{{ cert.academic_year_from }}</strong> to <strong>{{ cert.academic_year_to }}</strong>. The student has maintained good conduct and character during their period of study.
-    </p>
+    {% if cert_type == "conduct" %}
+        <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+            This is to certify that <strong style="font-size: 1.3rem; text-decoration: underline;">{{ cert.name }}</strong> 
+            was a bonafide student of <strong>{{ cert.degree }}</strong> in the branch of <strong>{{ cert.branch }}</strong> 
+            during the academic year <strong>{{ cert.academic_year_from }}</strong> to <strong>{{ cert.academic_year_to }}</strong>. 
+            The student has maintained good conduct and character during their period of study.
+        </p>
+
+    {% elif cert_type == "transfer" %}
+        <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+            This is to certify that <strong>{{ cert.student_name }}</strong>, admission no. <strong>{{ cert.admission_no }}</strong>, 
+            born on <strong>{{ cert.dob|date:"d M Y" }}</strong>, was a student of this institution enrolled in <strong>{{ cert.course }}</strong>. 
+            The student left on <strong>{{ cert.date_of_leaving|date:"d M Y" }}</strong>.
+        </p>
+
+    {% elif cert_type == "employee" %}
+        <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+            This is to confirm that <strong>{{ cert.employee_name }}</strong> (Emp Code: <strong>{{ cert.emp_code }}</strong>) 
+            joined our organization as <strong>{{ cert.designation }}</strong> on <strong>{{ cert.joining_date|date:"d M Y" }}</strong>.  
+            Policy terms: <em>{{ cert.policy_terms }}</em>
+        </p>
+
+    {% elif cert_type == "rental" %}
+        <p style="margin-top: 30px; font-size: 1.15rem; line-height: 1.9; text-align: justify;">
+            This agreement is made between tenant <strong>{{ cert.tenant_name }}</strong> and landlord <strong>{{ cert.landlord_name }}</strong>.  
+            The property located at <strong>{{ cert.property_address }}</strong> is rented at <strong>{{ cert.rent_amount }}</strong> per month 
+            from <strong>{{ cert.start_date|date:"d M Y" }}</strong> to <strong>{{ cert.end_date|date:"d M Y" }}</strong>.
+        </p>
+    {% endif %}
 
     <!-- Footer Section -->
     <div style="margin-top: 80px; display: flex; justify-content: space-between; font-size: 1rem;">
         <div>
             <p>Date: <strong>{{ cert.approved_date|date:"d M Y" }}</strong></p>
-            <p>Student Signature:</p>
-            <img src="{{ cert.signature.url }}" alt="Signature" width="120" style="margin-top: 10px;">
+            <p>Student/Employee Signature:</p>
+            {% if cert.signature %}
+                <img src="{{ cert.signature.url }}" alt="Signature" width="120" style="margin-top: 10px;">
+            {% endif %}
         </div>
         <div style="text-align: right;">
-            <p>Principal’s Signature:</p>
+            <p>
+                {% if cert_type == "conduct" or cert_type == "transfer" %} Principal’s Signature:
+                {% elif cert_type == "employee" %} HR’s Signature:
+                {% elif cert_type == "rental" %} Landlord’s Signature:
+                {% endif %}
+            </p>
             {% if cert.principal_signature %}
-                <img src="{{ cert.principal_signature.url }}" alt="Principal Signature" width="120" style="margin-top: 10px;">
+                <img src="{{ cert.principal_signature.url }}" alt="Signature" width="120" style="margin-top: 10px;">
             {% else %}
                 <em>(Pending approval)</em>
             {% endif %}
@@ -36,11 +67,11 @@
 
 <!-- Approval Form -->
 <div class="container mt-4" style="max-width: 800px;">
-    <h3 class="mt-4">Approve Conduct Certificate</h3>
-    <form method="POST" enctype="multipart/form-data" class="mt-3" action="{% url 'approve_certificate' cert.id 'conduct' %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Approve with Signature</button>
-</form>
+    <h3 class="mt-4">Approve {{ cert_type|title }} Certificate</h3>
+    <form method="POST" enctype="multipart/form-data" class="mt-3" action="{% url 'approve_certificate' cert.id cert_type %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-success">Approve with Signature</button>
+    </form>
 </div>
 {% endblock %}

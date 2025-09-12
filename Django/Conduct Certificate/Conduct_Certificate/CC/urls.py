@@ -10,6 +10,8 @@ urlpatterns = [
     path('logout/', views.logout_user, name='logout'),
     path('student_dashboard/', views.student_dashboard, name='student_dashboard'),
     path('principal_dashboard/', views.principal_dashboard, name='principal_dashboard'),
+    path('hr_dashboard/', views.hr_dashboard, name='hr_dashboard'),
+    path('landlord_dashboard/', views.landlord_dashboard, name='landlord_dashboard'),
 
     # Approve/Reject with certificate type
     path('approve-certificate/<int:cert_id>/<str:cert_type>/', views.approve_certificate, name='approve_certificate'),
